@@ -4,11 +4,13 @@ import '../css/Block.css'
 class Block extends Component {
     constructor(props){
         super(props);
-        this.state = props.data;
         this.location = props.blockID
         this.block_content = this.makeBlockContent();
     }
-
+    componentDidUpdate(){
+        console.log(this.props.type);
+        this.block_content = this.makeBlockContent();
+    }
     makeBlockContent(){
         // console.log(this.state.player.location);
         if (this.props.type === "player"){

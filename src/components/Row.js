@@ -7,6 +7,11 @@ class Row extends Component {
     constructor(props){
         super(props);
         this.makeRows(props);
+
+    }
+    componentDidUpdate(){
+        // console.log(this.props.data.player);
+        this.makeRows(this.props);
     }
     makeRows(props){
         // console.log(props);

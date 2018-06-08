@@ -28,6 +28,11 @@ class World extends Component {
     this.makeWorldRows(this.state.world.size);
     this.movePlayer = this.movePlayer.bind(this);
   }
+  componentDidUpdate(){
+    console.log("update");
+    console.log(this.state.player.location);
+    this.makeWorldRows(this.state.world.size);
+  }
 
   makeWorldRows(size){
     let world_rows = '0'.repeat(size).split("");
@@ -49,15 +54,15 @@ class World extends Component {
     e.preventDefault();
     // console.log(this.state);
     let player = {...this.state.player};
-    console.log(player.location);
+    // console.log(player.location);
     player.location = String(Number(player.location) + 1);
-    console.log(player.location);
+    // console.log(player.location);
     this.setState({player: player});
     
   }
 
   render() {
-    console.log(this.state.player.location);
+    // console.log(this.state.player.location);
     return (
       <div className="world" onClick={this.movePlayer}>
         {this.these_rows}
