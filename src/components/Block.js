@@ -10,7 +10,8 @@ class Block extends Component {
     }
 
     makeBlockContent(){
-        if (this.state.player.location === this.props.blockID){
+        // console.log(this.state.player.location);
+        if (this.props.type === "player"){
             return(
                 <div className="block_content">
                     <span>X</span>

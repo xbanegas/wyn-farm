@@ -53,7 +53,7 @@ class World extends Component {
     player.location = String(Number(player.location) + 1);
     console.log(player.location);
     this.setState({player: player});
-    // this.these_rows = this.makeWorldRows();
+    
   }
 
   render() {
