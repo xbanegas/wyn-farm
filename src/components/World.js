@@ -26,6 +26,7 @@ class World extends Component {
     }
 
     this.makeWorldRows(this.state.world.size);
+    this.movePlayer = this.movePlayer.bind(this);
   }
 
   makeWorldRows(size){
@@ -44,9 +45,21 @@ class World extends Component {
     // console.log(this.these_rows);
   }
 
+  movePlayer(e){
+    e.preventDefault();
+    // console.log(this.state);
+    let player = {...this.state.player};
+    console.log(player.location);
+    player.location = String(Number(player.location) + 1);
+    console.log(player.location);
+    this.setState({player: player});
+    // this.these_rows = this.makeWorldRows();
+  }
+
   render() {
+    console.log(this.state.player.location);
     return (
-      <div className="world">
+      <div className="world" onClick={this.movePlayer}>
         {this.these_rows}
       </div>
     );
