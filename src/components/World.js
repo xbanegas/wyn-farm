@@ -45,25 +45,17 @@ class World extends Component {
 
   chngLocID = (locID, type, inc) => {
     let newLoc;
-    // console.log(inc)
-    if (type === "vert") {
-      newLoc = locIDToArray(locID);
-      newLoc[0] = newLoc[0] + parseInt(inc);
-      console.log(newLoc);
-      if (newLoc[0] < 0 ) {newLoc[0] = padNum(this.state.world.size-1)}
-      else if (newLoc[0]>this.state.world.size-1) { newLoc[0] = padNum(0) }
-      newLoc = locArrayToLocId(newLoc);
-      console.log(newLoc);
-      return newLoc;
-    } else if (type === "horiz"){
-      newLoc = locIDToArray(locID);
-      newLoc[1] = newLoc[1] + parseInt(inc);
-      if (newLoc[1] < 0 ) {newLoc[1] = padNum(this.state.world.size-1)}
-      else if (newLoc[1]>this.state.world.size-1) { newLoc[1] = padNum(0) }
-      newLoc = locArrayToLocId(newLoc);
-      console.log(newLoc);      
-      return newLoc;
-    }
+    let dim;
+    if (type === "vert"){dim = 0}
+    else if (type === "horiz") {dim = 1}
+    newLoc = locIDToArray(locID);
+    newLoc[dim] = newLoc[dim] + parseInt(inc);
+    console.log(newLoc);
+    if (newLoc[dim] < 0 ) {newLoc[dim] = padNum(this.state.world.size-1)}
+    else if (newLoc[dim]>this.state.world.size-1) { newLoc[dim] = padNum(0) }
+    newLoc = locArrayToLocId(newLoc);
+    console.log(newLoc);
+    return newLoc;
   };
 
   makeWorldRows(size, playerLoc, player){
