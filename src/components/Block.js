@@ -5,26 +5,32 @@ class Block extends Component {
     constructor(props){
         super(props);
         this.location = props.blockID
-        this.block_content = this.makeBlockContent();
+        this.block_content = this.makeBlockContent(props);
     }
     componentDidUpdate(){
+        console.log('block update');
         // console.log(this.props.type);
-        this.block_content = this.makeBlockContent();
+        this.block_content = this.makeBlockContent(this.props);
     }
-    makeBlockContent(){
+    componentWillReceiveProps(newProps){
+        // console.log(newProps);
+        this.block_content = this.makeBlockContent(this.props);
+    }
+    makeBlockContent(props){
         // console.log(this.state.player.location);
-        if (this.props.type === "player"){
+        if (props.type === "player"){
             return(
                 <div className="block_content">
                     <span>X</span>
                 </div>
             );
-        } 
-        return(
-            <div className="block_content">
-                <span></span>
-            </div>
-        );
+        } else {
+            return(
+                <div className="block_content">
+                    <span></span>
+                </div>
+            );
+        }
     }
 
     render(){

@@ -13,53 +13,58 @@ const locIDToArray = (locID) => {
 };
 
 const locArrayToLocId = (locArray) => {
+  locArray = locArray.map((coord) => padNum(coord));
   return locArray.join("")
 }
-
-const chngLocID = (locID, type, inc) => {
-  let newLoc;
-  console.log(inc)
-  if (type === "vert") {
-    newLoc = locIDToArray(locID);
-    newLoc[0] += inc;
-    newLoc = locArrayToLocId(newLoc)
-    return newLoc;
-  } else if (type === "horiz"){
-    console.log(locID);
-    newLoc = locIDToArray(locID);
-    newLoc[1] += inc;
-    newLoc = locArrayToLocId(newLoc)
-    return newLoc;
-  }
-};
 
 class World extends Component {
   constructor(props){
     super(props);
     this.state = {
       world: {
-        size: 51,
+        size: 5,
         grid:[]
       },
       player: {
           id: '298323',
-          location: '2525',
+          location: '0404',
           name: 'kidA',
           hunger: 0,
           health: 10
       }
     }
 
-    this.makeWorldRows(this.state.world.size);
+    this.makeWorldRows(this.state.world.size, this.state.player.location);
     this.movePlayer = this.movePlayer.bind(this);
   }
   componentDidUpdate(){
-    // console.log("update");
+    console.log("world update");
     // console.log(this.state.player.location);
-    this.makeWorldRows(this.state.world.size);
+    // this.makeWorldRows(this.state.world.size, this.playerLoc, this.state.player);
   }
 
-  makeWorldRows(size){
+  chngLocID = (locID, type, inc) => {
+    let newLoc;
+    // console.log(inc)
+    if (type === "vert") {
+      newLoc = locIDToArray(locID);
+      newLoc[0] = (newLoc[0] + parseInt(inc)) % (this.state.world.size-1);
+      console.log(newLoc[0]);
+      if (newLoc[0] == '00') {newLoc[0] = padNum(this.state.world.size - 1)}
+      newLoc = locArrayToLocId(newLoc);
+      console.log(newLoc);
+      return newLoc;
+    } else if (type === "horiz"){
+      newLoc = locIDToArray(locID);
+      newLoc[1] = (newLoc[1] + parseInt(inc)) % this.state.world.size;
+      if (newLoc[1] == '00') {newLoc[1] = padNum(this.state.world.size)}
+      newLoc = locArrayToLocId(newLoc);
+      console.log(newLoc);      
+      return newLoc;
+    }
+  };
+
+  makeWorldRows(size, playerLoc, player){
     let world_rows = '0'.repeat(size).split("");
     // console.log(world_rows);
     world_rows = world_rows.map(()=>'0'.repeat(size).split(""));
@@ -70,8 +75,9 @@ class World extends Component {
 
     this.these_rows = [];
     world_rows.forEach((row, i)=>{
-      this.these_rows.push(<Row key={i} styleName={`row row-${i}`} data={this.state} rowNum={padNum(i)} />);
+      this.these_rows.push(<Row key={i} styleName={`row row-${i}`} data={this.state} playerLoc={playerLoc} rowNum={padNum(i)} />);
     });
+    this.setState({player: player});
     // console.log(this.these_rows);
   }
   
@@ -79,29 +85,27 @@ class World extends Component {
     e.preventDefault();
     let player = {...this.state.player};
     let currentLoc = player.location;
-    console.log(currentLoc);
+    // console.log(currentLoc);
     switch(e.key){
       case "w":
-        player.location = chngLocID(currentLoc, "vert", -1);
-        this.setState({player: player});
+        player.location = this.chngLocID(currentLoc, "vert", -1);
+        this.playerLoc = player.location;
         break;
       case "a":
-        player.location = chngLocID(currentLoc, "horiz", -1);
-        this.setState({player: player});
+        player.location = this.chngLocID(currentLoc, "horiz", -1);
+        this.setState({player: player}, ()=>{this.makeWorldRows(this.state.world.size)});
         break;
       case "s":
-        player.location = chngLocID(currentLoc, "vert", 1);
-        this.setState({player: player});
+        player.location = this.chngLocID(currentLoc, "vert", 1);
+        this.setState({player: player}, ()=>{this.makeWorldRows(this.state.world.size)});
         break;
       case "d":
-        player.location = chngLocID(currentLoc, "horiz", 1);
-        this.setState({player: player});
+        player.location = this.chngLocID(currentLoc, "horiz", 1);
+        this.setState({player: player}), ()=>{this.makeWorldRows(this.state.world.size)};
         break;
-    }
-    // console.log(currentLoc);
-    
-    
-    
+      }
+    this.makeWorldRows(this.state.world.size, this.playerLoc, player);
+    console.log(this.playerLoc);
   }
 
   render() {

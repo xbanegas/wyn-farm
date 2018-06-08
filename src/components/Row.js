@@ -10,15 +10,19 @@ class Row extends Component {
 
     }
     componentDidUpdate(){
-        // console.log(this.props.data.player);
-        this.makeRows(this.props);
+        console.log("rowupdate");
+        // this.makeRows(this.props);
+    }
+    componentWillReceiveProps(newProps){
+        // console.log(newProps);
+        this.makeRows(newProps);
     }
     makeRows(props){
         // console.log(props);
         let size = props.data.world.size;
         this.these_blocks = []
-        for (let i = 0; i<= size; i++){
-            if(props.rowNum+padNum(i) === props.data.player.location){
+        for (let i = 0; i< size; i++){
+            if(props.rowNum+padNum(i) === props.playerLoc){
                 this.these_blocks.push(<Block type="player" data={props.data} blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
             } else {
             this.these_blocks.push(<Block type="" data={props.data} blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
