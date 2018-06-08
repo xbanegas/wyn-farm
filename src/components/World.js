@@ -56,8 +56,8 @@ class World extends Component {
       return newLoc;
     } else if (type === "horiz"){
       newLoc = locIDToArray(locID);
-      newLoc[1] = (newLoc[1] + parseInt(inc)) % this.state.world.size;
-      if (newLoc[1] == '00') {newLoc[1] = padNum(this.state.world.size)}
+      newLoc[1] = newLoc[1] + parseInt(inc);
+      if (newLoc[1] < 0 ) {newLoc[1] = padNum(this.state.world.size-1)}
       newLoc = locArrayToLocId(newLoc);
       console.log(newLoc);      
       return newLoc;
@@ -93,15 +93,15 @@ class World extends Component {
         break;
       case "a":
         player.location = this.chngLocID(currentLoc, "horiz", -1);
-        this.setState({player: player}, ()=>{this.makeWorldRows(this.state.world.size)});
+        this.playerLoc = player.location;
         break;
       case "s":
         player.location = this.chngLocID(currentLoc, "vert", 1);
-        this.setState({player: player}, ()=>{this.makeWorldRows(this.state.world.size)});
+        this.playerLoc = player.location;
         break;
       case "d":
         player.location = this.chngLocID(currentLoc, "horiz", 1);
-        this.setState({player: player}), ()=>{this.makeWorldRows(this.state.world.size)};
+        this.playerLoc = player.location;
         break;
       }
     this.makeWorldRows(this.state.world.size, this.playerLoc, player);
