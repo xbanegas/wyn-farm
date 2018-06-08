@@ -51,6 +51,7 @@ class World extends Component {
       newLoc[0] = newLoc[0] + parseInt(inc);
       console.log(newLoc);
       if (newLoc[0] < 0 ) {newLoc[0] = padNum(this.state.world.size-1)}
+      else if (newLoc[0]>this.state.world.size-1) { newLoc[0] = padNum(0) }
       newLoc = locArrayToLocId(newLoc);
       console.log(newLoc);
       return newLoc;
@@ -58,6 +59,7 @@ class World extends Component {
       newLoc = locIDToArray(locID);
       newLoc[1] = newLoc[1] + parseInt(inc);
       if (newLoc[1] < 0 ) {newLoc[1] = padNum(this.state.world.size-1)}
+      else if (newLoc[1]>this.state.world.size-1) { newLoc[1] = padNum(0) }
       newLoc = locArrayToLocId(newLoc);
       console.log(newLoc);      
       return newLoc;
