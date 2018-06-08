@@ -50,11 +50,10 @@ class World extends Component {
     else if (type === "horiz") {dim = 1}
     newLoc = locIDToArray(locID);
     newLoc[dim] = newLoc[dim] + parseInt(inc);
-    console.log(newLoc);
     if (newLoc[dim] < 0 ) {newLoc[dim] = padNum(this.state.world.size-1)}
     else if (newLoc[dim]>this.state.world.size-1) { newLoc[dim] = padNum(0) }
     newLoc = locArrayToLocId(newLoc);
-    console.log(newLoc);
+    // console.log(newLoc);
     return newLoc;
   };
 
@@ -69,7 +68,7 @@ class World extends Component {
 
     this.these_rows = [];
     world_rows.forEach((row, i)=>{
-      this.these_rows.push(<Row key={i} styleName={`row row-${i}`} data={this.state} playerLoc={playerLoc} rowNum={padNum(i)} />);
+      this.these_rows.push(<Row key={i} styleName={`row row-${i}`} worldSize={this.state.world.size} playerLoc={playerLoc} rowNum={padNum(i)} />);
     });
     this.setState({player: player});
     // console.log(this.these_rows);

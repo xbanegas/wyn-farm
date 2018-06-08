@@ -19,13 +19,13 @@ class Row extends Component {
     }
     makeRows(props){
         // console.log(props);
-        let size = props.data.world.size;
+        let size = props.worldSize;
         this.these_blocks = []
         for (let i = 0; i< size; i++){
             if(props.rowNum+padNum(i) === props.playerLoc){
-                this.these_blocks.push(<Block type="player" data={props.data} blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
+                this.these_blocks.push(<Block type="player" blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
             } else {
-            this.these_blocks.push(<Block type="" data={props.data} blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
+            this.these_blocks.push(<Block type="" blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
             }
         }
         // console.log(this.these_blocks);
