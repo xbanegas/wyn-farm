@@ -48,9 +48,9 @@ class World extends Component {
     // console.log(inc)
     if (type === "vert") {
       newLoc = locIDToArray(locID);
-      newLoc[0] = (newLoc[0] + parseInt(inc)) % (this.state.world.size-1);
-      console.log(newLoc[0]);
-      if (newLoc[0] == '00') {newLoc[0] = padNum(this.state.world.size - 1)}
+      newLoc[0] = newLoc[0] + parseInt(inc);
+      console.log(newLoc);
+      if (newLoc[0] < 0 ) {newLoc[0] = padNum(this.state.world.size-1)}
       newLoc = locArrayToLocId(newLoc);
       console.log(newLoc);
       return newLoc;
