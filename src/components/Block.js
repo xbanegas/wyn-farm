@@ -13,8 +13,8 @@ class Block extends Component {
         this.block_content = this.makeBlockContent(this.props);
     }
     componentWillReceiveProps(newProps){
-        // console.log(newProps);
-        this.block_content = this.makeBlockContent(this.props);
+        console.log("newProps");
+        this.block_content = this.makeBlockContent(newProps);
     }
     makeBlockContent(props){
         // console.log(this.state.player.location);
