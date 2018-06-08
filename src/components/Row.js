@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {padNum} from './World';
 import Block from './Block';
 import '../css/Row.css';
 
@@ -9,11 +10,11 @@ class Row extends Component {
     }
     makeRows(props){
         // console.log(props);
-        let size = props.data.size;
+        let size = props.data.world.size;
         this.these_blocks = []
         for (let i = 0; i<= size; i++){
             // console.log(i);
-            this.these_blocks.push(<Block data={props.data} />)
+            this.these_blocks.push(<Block data={props.data} blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>)
         }
         // console.log(this.these_blocks);
     }
