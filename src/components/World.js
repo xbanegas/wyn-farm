@@ -8,6 +8,31 @@ const padNum = (num)=> {
   return String("0" + num).slice(-2);
 };
 
+const locIDToArray = (locID) => {
+  return [Number(locID.slice(0,2)),Number(locID.slice(2))]
+};
+
+const locArrayToLocId = (locArray) => {
+  return locArray.join("")
+}
+
+const chngLocID = (locID, type, inc) => {
+  let newLoc;
+  console.log(inc)
+  if (type === "vert") {
+    newLoc = locIDToArray(locID);
+    newLoc[0] += inc;
+    newLoc = locArrayToLocId(newLoc)
+    return newLoc;
+  } else if (type === "horiz"){
+    console.log(locID);
+    newLoc = locIDToArray(locID);
+    newLoc[1] += inc;
+    newLoc = locArrayToLocId(newLoc)
+    return newLoc;
+  }
+};
+
 class World extends Component {
   constructor(props){
     super(props);
@@ -29,8 +54,8 @@ class World extends Component {
     this.movePlayer = this.movePlayer.bind(this);
   }
   componentDidUpdate(){
-    console.log("update");
-    console.log(this.state.player.location);
+    // console.log("update");
+    // console.log(this.state.player.location);
     this.makeWorldRows(this.state.world.size);
   }
 
@@ -49,22 +74,40 @@ class World extends Component {
     });
     // console.log(this.these_rows);
   }
-
+  
   movePlayer(e){
     e.preventDefault();
-    // console.log(this.state);
     let player = {...this.state.player};
-    // console.log(player.location);
-    player.location = String(Number(player.location) + 1);
-    // console.log(player.location);
-    this.setState({player: player});
+    let currentLoc = player.location;
+    console.log(currentLoc);
+    switch(e.key){
+      case "w":
+        player.location = chngLocID(currentLoc, "vert", -1);
+        this.setState({player: player});
+        break;
+      case "a":
+        player.location = chngLocID(currentLoc, "horiz", -1);
+        this.setState({player: player});
+        break;
+      case "s":
+        player.location = chngLocID(currentLoc, "vert", 1);
+        this.setState({player: player});
+        break;
+      case "d":
+        player.location = chngLocID(currentLoc, "horiz", 1);
+        this.setState({player: player});
+        break;
+    }
+    // console.log(currentLoc);
+    
+    
     
   }
 
   render() {
     // console.log(this.state.player.location);
     return (
-      <div className="world" onClick={this.movePlayer}>
+      <div className="world" onKeyPress={this.movePlayer} tabIndex="0" >
         {this.these_rows}
       </div>
     );

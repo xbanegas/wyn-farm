@@ -8,7 +8,7 @@ class Block extends Component {
         this.block_content = this.makeBlockContent();
     }
     componentDidUpdate(){
-        console.log(this.props.type);
+        // console.log(this.props.type);
         this.block_content = this.makeBlockContent();
     }
     makeBlockContent(){
@@ -22,7 +22,7 @@ class Block extends Component {
         } 
         return(
             <div className="block_content">
-                <span>_</span>
+                <span></span>
             </div>
         );
     }
@@ -30,6 +30,7 @@ class Block extends Component {
     render(){
         return(
             <div className="block" id={this.location}>
+                {this.location}
                 {this.block_content}
             </div>
         );
