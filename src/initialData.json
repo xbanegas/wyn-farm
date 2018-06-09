@@ -1,6 +1,9 @@
 {
     "world": {
         "size": 10,
+        "dayCount": 0,
+        "dayInterval": 24,
+        "moveCount": 0,
         "grid":[],
         "trees":{
             "total": 10,

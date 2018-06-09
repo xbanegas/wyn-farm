@@ -8,11 +8,11 @@ class Inventory extends Component {
     }
     renderItemDivs(){
         let item_divs = []
-        console.log(this.props.playerItems);
+        // console.log(this.props.playerItems);
         let items = this.props.playerItems;
         for (let item in items){
             item_divs.push(<div>{item}: {items[item]}</div>)
-            console.log(item_divs);
+            // console.log(item_divs);
         }
         return item_divs
     }

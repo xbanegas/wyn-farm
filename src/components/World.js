@@ -45,6 +45,17 @@ class World extends Component {
   
   handleKey(e){
     e.preventDefault();
+    // Move Time Forward
+    let world = {...this.state.world};
+    world.moveCount++;
+    let moveCount = world.moveCount;
+    if (!(moveCount < world.dayInterval)){ 
+      world.moveCount = 0;
+      world.dayCount++;
+    }
+    this.setState({world: world});
+    console.log(this.state.world.moveCount);
+    // Handle Keypresses
     let worldSize = this.state.world.size
     let player = {...this.state.player};
     let currentLoc = player.location;
@@ -76,7 +87,7 @@ class World extends Component {
             delete this.state.world.trees[currentLoc];
             treeLocs.splice(treeLocs.indexOf(currentLoc),1);
           }
-          console.log(this.state.world.trees);
+          // console.log(this.state.world.trees);
         }
         break;
       }
@@ -88,6 +99,7 @@ class World extends Component {
   render() {
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
+        <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
         {this.these_rows}
         <Inventory playerItems={this.state.player.inventory} />
       </div>
