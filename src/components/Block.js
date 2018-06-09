@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import containsPlayer from '../utils/worldUtils';
 import '../css/Block.css'
 
 class Block extends Component {
@@ -16,17 +17,26 @@ class Block extends Component {
         console.log("newProps");
         this.block_content = this.makeBlockContent(newProps);
     }
+
+    player(){
+        return(
+            <div className="player">
+                <span>X</span>
+            </div>
+        );
+    }
+
     makeBlockContent(props){
         // console.log(this.state.player.location);
-        if (props.type === "player"){
+        if (props.blockCode[0] === "x"){
             return(
-                <div className="block_content">
-                    <span>X</span>
+                <div className={`block_content ${props.blockCode.slice(0)}`}>
+                    {this.player()}
                 </div>
             );
         } else {
             return(
-                <div className="block_content">
+                <div className={`block_content ${props.blockCode.slice(0)}`}>
                     <span></span>
                 </div>
             );

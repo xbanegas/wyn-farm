@@ -12,7 +12,7 @@ const locArrayToLocId = (locArray) => {
 }
 
 const makeGrid = (size) => {
-    let grid = Array(5).fill(Array(5).fill({}));
+    let grid = Array(size).fill(Array(size).fill({}));
     grid = grid.map((row, i)=>{
       row = row.map((block, j)=>{
           block = {location:  `${padNum(i)}-${padNum(j)}`};
@@ -23,18 +23,36 @@ const makeGrid = (size) => {
     return grid
 }
 
-const chngLocID = (worldSize, locID, type, inc) => {
-    let newLoc;
-    let dim;
-    if (type === "vert"){dim = 0}
-    else if (type === "horiz") {dim = 1}
-    newLoc = locIDToArray(locID);
-    newLoc[dim] = newLoc[dim] + parseInt(inc);
-    if (newLoc[dim] < 0 ) {newLoc[dim] = padNum(worldSize-1)}
-    else if (newLoc[dim]>worldSize-1) { newLoc[dim] = padNum(0) }
-    newLoc = locArrayToLocId(newLoc);
-    // console.log(newLoc);
-    return newLoc;
-  };
 
-export {padNum, locIDToArray, locArrayToLocId, makeGrid, chngLocID}
+const genGauss = (mean, stdev) => {
+    var y2;
+    var use_last = false;
+    return function() {
+        var y1;
+        if(use_last) {
+            y1 = y2;
+            use_last = false;
+        }
+        else {
+            var x1, x2, w;
+            do {
+                    x1 = 2.0 * Math.random() - 1.0;
+                    x2 = 2.0 * Math.random() - 1.0;
+                    w  = x1 * x1 + x2 * x2;               
+            } while( w >= 1.0);
+            w = Math.sqrt((-2.0 * Math.log(w))/w);
+            y1 = x1 * w;
+            y2 = x2 * w;
+            use_last = true;
+        }
+
+        var retval = mean + stdev * y1;
+        if(retval > 0) 
+            return retval;
+        return -retval;
+    }
+
+}
+
+
+export {padNum, locIDToArray, locArrayToLocId, makeGrid, genGauss}

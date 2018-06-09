@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Row from './Row';
-import {padNum, locIDToArray, locArrayToLocId, makeGrid, chngLocID} from '../utils/dataUtils';
+import {padNum, makeGrid} from '../utils/dataUtils';
+import {genPlayerInitialLoc, chngLocID, genTreeLocs} from '../utils/worldUtils';
 import logo from '../logo.svg';
 import initialData from '../initialData';
 import '../css/World.css';
@@ -9,8 +10,10 @@ import '../css/World.css';
 class World extends Component {
   constructor(props){
     super(props);
-    this.state = initialData
-    this.makeWorldRows(this.state.player.location);
+    this.state = initialData;
+    this.state.player.location = genPlayerInitialLoc(this.state.world.size);
+    this.state.world.treeLocs = genTreeLocs(this.state.world.size, this.state.world.trees.total);
+    this.makeWorldRows(this.state.player.location, this.state.player);
     this.movePlayer = this.movePlayer.bind(this);
   }
   componentDidUpdate(){
@@ -20,6 +23,7 @@ class World extends Component {
   makeWorldRows(playerLoc, player){
     this.state.grid = makeGrid(this.state.world.size);
     this.these_rows = [];
+    let treeLocs = this.state.world.trees.treeLocs;
     this.state.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row 
@@ -27,6 +31,7 @@ class World extends Component {
           styleName={`row row-${i}`} 
           worldSize={this.state.world.size} 
           playerLoc={playerLoc} 
+          treeLocs={treeLocs}
           rowNum={padNum(i)} />
       );
     });
@@ -38,7 +43,7 @@ class World extends Component {
     let worldSize = this.state.world.size
     let player = {...this.state.player};
     let currentLoc = player.location;
-
+    console.log('prev pos', currentLoc);
     switch(e.key){
       case "w":
         player.location = chngLocID(worldSize, currentLoc, "vert", -1);

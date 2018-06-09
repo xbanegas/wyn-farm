@@ -22,10 +22,15 @@ class Row extends Component {
         let size = props.worldSize;
         this.these_blocks = []
         for (let i = 0; i< size; i++){
-            if(props.rowNum+padNum(i) === props.playerLoc){
-                this.these_blocks.push(<Block type="player" blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
+            if(props.rowNum+padNum(i) === props.playerLoc) {
+                this.these_blocks.push(
+                    <Block 
+                        blockCode={`x00`} 
+                        blockID={`${this.props.rowNum}` + `${padNum(i)}`}
+                    />
+                );
             } else {
-            this.these_blocks.push(<Block type="" blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
+            this.these_blocks.push(<Block blockCode="z00" blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
             }
         }
         // console.log(this.these_blocks);
