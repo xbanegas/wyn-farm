@@ -14,7 +14,7 @@ class World extends Component {
     this.state = initialData;
     this.state.player.location = genPlayerInitialLoc(this.state.world.size);
     // console.log(this.state.player.location);
-    this.state.world.trees.locs = genTreeLocs(this.state.world.size, this.state.world.trees.total);
+    this.state.world.trees = genTreeLocs(this.state.world.size, this.state.world.trees.total);
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
   }
@@ -26,6 +26,7 @@ class World extends Component {
     this.state.grid = makeGrid(this.state.world.size);
     this.these_rows = [];
     let treeLocs = this.state.world.trees.locs;
+    let trees = this.state.world.trees;
     // console.log(treeLocs);
     this.state.grid.forEach((row, i)=>{
       this.these_rows.push(
@@ -35,6 +36,7 @@ class World extends Component {
           worldSize={this.state.world.size} 
           playerLoc={playerLoc} 
           treeLocs={treeLocs}
+          trees={trees}
           rowNum={padNum(i)} />
       );
     });
@@ -69,6 +71,12 @@ class World extends Component {
         if(treeLocs.includes(currentLoc)){
           console.log('hello tree');
           player.inventory.wood++;
+          this.state.world.trees[currentLoc].supply--;
+          if (this.state.world.trees[currentLoc].supply === 0){
+            delete this.state.world.trees[currentLoc];
+            treeLocs.splice(treeLocs.indexOf(currentLoc),1);
+          }
+          console.log(this.state.world.trees);
         }
         break;
       }

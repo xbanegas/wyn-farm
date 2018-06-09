@@ -4,7 +4,7 @@
         "grid":[],
         "trees":{
             "total": 10,
-            "locs": []
+            "trees": []
         }
     },
     "player": {

@@ -44,7 +44,11 @@ const genTreeLocs = (worldSize, total) => {
         let y = Math.floor(gaussGen());
         treeLocs.push(`${padNum(x)}${padNum(y)}`)
     }
-    return treeLocs
+    let trees = {locs: treeLocs}
+    treeLocs.forEach((treeLoc)=>{
+        trees[treeLoc] = {location: treeLoc, supply: 10};
+    });
+    return trees
 };
 
 

@@ -15,10 +15,6 @@ class Inventory extends Component {
             console.log(item_divs);
         }
         return item_divs
-        // for([item, val] of Object.entries(this.props.playerItems)){
-        //     item_divs.push(<div>${item}: ${val}</div>);
-        // }
-        // return item_divs;
     }
     render(){
         return(

@@ -20,11 +20,14 @@ class Row extends Component {
         this.these_blocks = []
         for (let i = 0; i< size; i++){
             let blockID = `${this.props.rowNum}` + `${padNum(i)}`;
+            // default to grass block
             let blockCode = ["z","00"];
-            // console.log(blockID, props.playerLoc);
+            // register player block
             if(blockID === props.playerLoc) {blockCode[0] = "x"}
-            // console.log(props.treeLocs);
-            if(props.treeLocs.includes(blockID)){blockCode[1] = "33"}
+            // register tree block
+            if(props.treeLocs.includes(blockID)){
+                blockCode[1] = "33";
+            }
             this.these_blocks.push(<Block blockCode={blockCode} blockID={blockID}/>);
         }
     }
