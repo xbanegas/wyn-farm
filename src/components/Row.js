@@ -23,7 +23,7 @@ class Row extends Component {
             let blockCode = ["z","00"];
             // console.log(blockID, props.playerLoc);
             if(blockID === props.playerLoc) {blockCode[0] = "x"}
-            console.log(props.treeLocs);
+            // console.log(props.treeLocs);
             if(props.treeLocs.includes(blockID)){blockCode[1] = "33"}
             this.these_blocks.push(<Block blockCode={blockCode} blockID={blockID}/>);
         }

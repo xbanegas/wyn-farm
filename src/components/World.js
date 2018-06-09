@@ -15,7 +15,7 @@ class World extends Component {
     // console.log(this.state.player.location);
     this.state.world.trees.locs = genTreeLocs(this.state.world.size, this.state.world.trees.total);
     this.makeWorldRows(this.state.player.location, this.state.player);
-    this.movePlayer = this.movePlayer.bind(this);
+    this.handleKey = this.handleKey.bind(this);
   }
   componentDidUpdate(){
     // console.log("world update");
@@ -25,7 +25,7 @@ class World extends Component {
     this.state.grid = makeGrid(this.state.world.size);
     this.these_rows = [];
     let treeLocs = this.state.world.trees.locs;
-    console.log(treeLocs);
+    // console.log(treeLocs);
     this.state.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row 
@@ -40,7 +40,7 @@ class World extends Component {
     this.setState({player: player});
   }
   
-  movePlayer(e){
+  handleKey(e){
     e.preventDefault();
     let worldSize = this.state.world.size
     let player = {...this.state.player};
@@ -62,13 +62,18 @@ class World extends Component {
         player.location = chngLocID(worldSize, currentLoc, "horiz", 1);
         this.playerLoc = player.location;
         break;
+      case "f":
+        console.log('farm');
+        console.log(this.state.world.trees.locs.includes(player.location));
       }
+      
+
     this.makeWorldRows(this.playerLoc, player);
   }
 
   render() {
     return (
-      <div className="world" onKeyPress={this.movePlayer} tabIndex="0" >
+      <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
         {this.these_rows}
       </div>
     );

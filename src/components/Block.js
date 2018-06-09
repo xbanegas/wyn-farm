@@ -9,12 +9,12 @@ class Block extends Component {
         this.block_content = this.makeBlockContent(props);
     }
     componentDidUpdate(){
-        console.log('block update');
+        // console.log('block update');
         // console.log(this.props.type);
         this.block_content = this.makeBlockContent(this.props);
     }
     componentWillReceiveProps(newProps){
-        console.log("newProps");
+        // console.log("newProps");
         this.block_content = this.makeBlockContent(newProps);
     }
 
@@ -27,7 +27,7 @@ class Block extends Component {
     }
 
     makeBlockContent(props){
-        console.log(props.blockCode);
+        // console.log(props.blockCode);
         if (props.blockCode[0] === "x"){
             return(
                 <div className={`block_content ${props.blockCode[1]}`}>
