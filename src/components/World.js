@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Row from './Row';
+import Inventory from './Inventory';
 import {padNum, makeGrid} from '../utils/dataUtils';
 import {genPlayerInitialLoc, chngLocID, genTreeLocs} from '../utils/worldUtils';
 import logo from '../logo.svg';
@@ -64,7 +65,12 @@ class World extends Component {
         break;
       case "f":
         console.log('farm');
-        console.log(this.state.world.trees.locs.includes(player.location));
+        let treeLocs = this.state.world.trees.locs
+        if(treeLocs.includes(currentLoc)){
+          console.log('hello tree');
+          player.inventory.wood++;
+        }
+        break;
       }
       
 
@@ -75,7 +81,9 @@ class World extends Component {
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
         {this.these_rows}
+        <Inventory playerItems={this.state.player.inventory} />
       </div>
+
     );
   }
 }
