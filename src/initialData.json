@@ -1,0 +1,13 @@
+{
+    "world": {
+        "size": 5,
+        "grid":[]
+    },
+    "player": {
+      "id": "298323",
+      "location": "0404",
+      "name": "kidA",
+      "hunger": 0,
+      "health": 10
+    }
+}

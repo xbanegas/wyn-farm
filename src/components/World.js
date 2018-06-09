@@ -1,73 +1,27 @@
 import React, { Component } from 'react';
 import Row from './Row';
-import Block from './Block';
+import {padNum, locIDToArray, locArrayToLocId, makeGrid, chngLocID} from '../utils/dataUtils';
 import logo from '../logo.svg';
+import initialData from '../initialData';
 import '../css/World.css';
 
-const padNum = (num)=> {
-  return String("0" + num).slice(-2);
-};
-
-const locIDToArray = (locID) => {
-  return [Number(locID.slice(0,2)),Number(locID.slice(2))]
-};
-
-const locArrayToLocId = (locArray) => {
-  locArray = locArray.map((coord) => padNum(coord));
-  return locArray.join("")
-}
 
 class World extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      world: {
-        size: 5,
-        grid:[]
-      },
-      player: {
-          id: '298323',
-          location: '0404',
-          name: 'kidA',
-          hunger: 0,
-          health: 10
-      }
-    }
+    this.state = initialData
 
     this.makeWorldRows(this.state.world.size, this.state.player.location);
     this.movePlayer = this.movePlayer.bind(this);
   }
   componentDidUpdate(){
     console.log("world update");
-    // console.log(this.state.player.location);
-    // this.makeWorldRows(this.state.world.size, this.playerLoc, this.state.player);
   }
 
-  chngLocID = (locID, type, inc) => {
-    let newLoc;
-    let dim;
-    if (type === "vert"){dim = 0}
-    else if (type === "horiz") {dim = 1}
-    newLoc = locIDToArray(locID);
-    newLoc[dim] = newLoc[dim] + parseInt(inc);
-    if (newLoc[dim] < 0 ) {newLoc[dim] = padNum(this.state.world.size-1)}
-    else if (newLoc[dim]>this.state.world.size-1) { newLoc[dim] = padNum(0) }
-    newLoc = locArrayToLocId(newLoc);
-    // console.log(newLoc);
-    return newLoc;
-  };
-
   makeWorldRows(size, playerLoc, player){
-    let world_rows = '0'.repeat(size).split("");
-    // console.log(world_rows);
-    world_rows = world_rows.map(()=>'0'.repeat(size).split(""));
-    world_rows.forEach((row, i) => row.forEach((block, j)=>{
-      world_rows[i][j] = { location: `${padNum(i)}` + `${padNum(j)}` }
-    }));
-    this.state.grid = world_rows;
-
+    this.state.grid = makeGrid(this.state.world.size);
     this.these_rows = [];
-    world_rows.forEach((row, i)=>{
+    this.state.grid.forEach((row, i)=>{
       this.these_rows.push(<Row key={i} styleName={`row row-${i}`} worldSize={this.state.world.size} playerLoc={playerLoc} rowNum={padNum(i)} />);
     });
     this.setState({player: player});
@@ -81,19 +35,19 @@ class World extends Component {
     // console.log(currentLoc);
     switch(e.key){
       case "w":
-        player.location = this.chngLocID(currentLoc, "vert", -1);
+        player.location = chngLocID(this.state.world.size, currentLoc, "vert", -1);
         this.playerLoc = player.location;
         break;
       case "a":
-        player.location = this.chngLocID(currentLoc, "horiz", -1);
+        player.location = chngLocID(this.state.world.size, currentLoc, "horiz", -1);
         this.playerLoc = player.location;
         break;
       case "s":
-        player.location = this.chngLocID(currentLoc, "vert", 1);
+        player.location = chngLocID(this.state.world.size, currentLoc, "vert", 1);
         this.playerLoc = player.location;
         break;
       case "d":
-        player.location = this.chngLocID(currentLoc, "horiz", 1);
+        player.location = chngLocID(this.state.world.size, currentLoc, "horiz", 1);
         this.playerLoc = player.location;
         break;
       }
