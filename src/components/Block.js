@@ -27,16 +27,21 @@ class Block extends Component {
     }
 
     makeBlockContent(props){
-        // console.log(this.state.player.location);
+        console.log(props.blockCode);
         if (props.blockCode[0] === "x"){
             return(
-                <div className={`block_content ${props.blockCode.slice(0)}`}>
+                <div className={`block_content ${props.blockCode[1]}`}>
                     {this.player()}
                 </div>
             );
-        } else {
+        } else if (props.blockCode[1] == "33"){
+            return (
+                <div className="block_content tree">TREE</div>
+            );
+        }
+        {
             return(
-                <div className={`block_content ${props.blockCode.slice(0)}`}>
+                <div className={`block_content ${props.blockCode[1]}`}>
                     <span></span>
                 </div>
             );

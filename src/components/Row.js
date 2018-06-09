@@ -10,30 +10,23 @@ class Row extends Component {
 
     }
     componentDidUpdate(){
-        console.log("rowupdate");
-        // this.makeRows(this.props);
+        // console.log("rowupdate");
     }
     componentWillReceiveProps(newProps){
-        // console.log(newProps);
         this.makeRows(newProps);
     }
     makeRows(props){
-        // console.log(props);
         let size = props.worldSize;
         this.these_blocks = []
         for (let i = 0; i< size; i++){
-            if(props.rowNum+padNum(i) === props.playerLoc) {
-                this.these_blocks.push(
-                    <Block 
-                        blockCode={`x00`} 
-                        blockID={`${this.props.rowNum}` + `${padNum(i)}`}
-                    />
-                );
-            } else {
-            this.these_blocks.push(<Block blockCode="z00" blockID={`${this.props.rowNum}` + `${padNum(i)}`}/>);
-            }
+            let blockID = `${this.props.rowNum}` + `${padNum(i)}`;
+            let blockCode = ["z","00"];
+            // console.log(blockID, props.playerLoc);
+            if(blockID === props.playerLoc) {blockCode[0] = "x"}
+            console.log(props.treeLocs);
+            if(props.treeLocs.includes(blockID)){blockCode[1] = "33"}
+            this.these_blocks.push(<Block blockCode={blockCode} blockID={blockID}/>);
         }
-        // console.log(this.these_blocks);
     }
     render(){
         return(
@@ -45,7 +38,3 @@ class Row extends Component {
 }
 
 export default Row;
-
-// row.forEach((block, j) =>{
-//     <Block className={block.location} />
-//   });

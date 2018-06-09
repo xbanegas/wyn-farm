@@ -24,7 +24,7 @@ const containsPlayer = (blockCode) => {
 }
 
 const genPlayerInitialLoc = (worldSize) => {
-    let halfSize = worldSize / 2;
+    let halfSize = (worldSize-1) / 2;
     let gaussGen = genGauss(halfSize, halfSize/2);
     let x = Math.floor(gaussGen());
     let y = Math.floor(gaussGen());
@@ -36,7 +36,7 @@ const genPlayerInitialLoc = (worldSize) => {
  * @param {*} worldSize 
  */
 const genTreeLocs = (worldSize, total) => {
-    let halfSize = worldSize / 2;
+    let halfSize = (worldSize -1) / 2;
     let gaussGen = genGauss(halfSize, halfSize/2);
     let treeLocs = []
     for (let i = 0; i <= total; i++) {
