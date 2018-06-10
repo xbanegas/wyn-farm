@@ -8,7 +8,14 @@
         "trees":{
             "total": 10,
             "trees": []
+        },
+        "grass": {
+            "grass" : []
+        },
+        "water": {
+            "water":[]
         }
+
     },
     "player": {
       "id": "298323",
@@ -18,7 +25,23 @@
       "health": 10,
       "coins":0,
       "inventory":{
-          "wood": 0
+          "wood": 0,
       }
-    }
+    },
+
+
+    "blockCodes": {
+        "empty": 00,
+        "grass": 11,
+        "water": 22,
+        "trees": 33,
+        "wheat": 44
+    },
+    "possibleInventory": [
+        "wood",
+        "seeds",
+        "bread"
+    ]
 }
+
+

@@ -19,7 +19,7 @@ class Row extends Component {
         let size = props.worldSize;
         this.these_blocks = []
         for (let i = 0; i< size; i++){
-            let blockID = `${this.props.rowNum}` + `${padNum(i)}`;
+            let blockID = `${this.props.rowNum}${padNum(i)}`;
             // default to grass block
             let blockCode = ["z","00"];
             // register player block
@@ -28,7 +28,7 @@ class Row extends Component {
             if(props.treeLocs.includes(blockID)){
                 blockCode[1] = "33";
             }
-            this.these_blocks.push(<Block blockCode={blockCode} blockID={blockID}/>);
+            this.these_blocks.push(<Block key={blockID} blockCode={blockCode} blockID={blockID}/>);
         }
     }
     render(){

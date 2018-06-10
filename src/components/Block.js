@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import containsPlayer from '../utils/worldUtils';
+// import containsPlayer from '../utils/worldUtils';
 import '../css/Block.css'
 
 class Block extends Component {
@@ -35,7 +35,7 @@ class Block extends Component {
                 </div>
             );
         // Render Tree
-        } else if (props.blockCode[1] == "33"){
+        } else if (props.blockCode[1] === "33"){
             return (
                 <div className="block_content tree">TREE</div>
             );

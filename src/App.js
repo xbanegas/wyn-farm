@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import World from "./components/World";
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 

@@ -45,6 +45,7 @@ const genTreeLocs = (worldSize, total) => {
         treeLocs.push(`${padNum(x)}${padNum(y)}`)
     }
     let trees = {locs: treeLocs}
+    // eventually set inital supply in json
     treeLocs.forEach((treeLoc)=>{
         trees[treeLoc] = {location: treeLoc, supply: 10};
     });

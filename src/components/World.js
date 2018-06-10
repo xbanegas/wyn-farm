@@ -3,7 +3,7 @@ import Row from './Row';
 import Inventory from './Inventory';
 import {padNum, makeGrid} from '../utils/dataUtils';
 import {genPlayerInitialLoc, chngLocID, genTreeLocs} from '../utils/worldUtils';
-import logo from '../logo.svg';
+// import logo from '../logo.svg';
 import initialData from '../initialData';
 import '../css/World.css';
 
@@ -13,7 +13,6 @@ class World extends Component {
     super(props);
     this.state = initialData;
     this.state.player.location = genPlayerInitialLoc(this.state.world.size);
-    // console.log(this.state.player.location);
     this.state.world.trees = genTreeLocs(this.state.world.size, this.state.world.trees.total);
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
@@ -23,12 +22,11 @@ class World extends Component {
   }
 
   makeWorldRows(playerLoc, player){
-    this.state.grid = makeGrid(this.state.world.size);
+    this.grid = makeGrid(this.state.world.size);
     this.these_rows = [];
     let treeLocs = this.state.world.trees.locs;
     let trees = this.state.world.trees;
-    // console.log(treeLocs);
-    this.state.grid.forEach((row, i)=>{
+    this.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row 
           key={i} 
@@ -46,6 +44,9 @@ class World extends Component {
   handleKey(e){
     e.preventDefault();
     // Move Time Forward
+    /**
+     * @todo move clock to worldutils
+     */
     let world = {...this.state.world};
     world.moveCount++;
     let moveCount = world.moveCount;
@@ -54,7 +55,6 @@ class World extends Component {
       world.dayCount++;
     }
     this.setState({world: world});
-    console.log(this.state.world.moveCount);
     // Handle Keypresses
     let worldSize = this.state.world.size
     let player = {...this.state.player};
@@ -78,17 +78,20 @@ class World extends Component {
         break;
       case "f":
         console.log('farm');
+        /**
+         * @todo farming to worldUtils
+         */
         let treeLocs = this.state.world.trees.locs
         if(treeLocs.includes(currentLoc)){
-          console.log('hello tree');
           player.inventory.wood++;
           this.state.world.trees[currentLoc].supply--;
           if (this.state.world.trees[currentLoc].supply === 0){
             delete this.state.world.trees[currentLoc];
             treeLocs.splice(treeLocs.indexOf(currentLoc),1);
           }
-          // console.log(this.state.world.trees);
         }
+        break;
+      default: 
         break;
       }
       
