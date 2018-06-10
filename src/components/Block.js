@@ -21,7 +21,6 @@ class Block extends Component {
     player(){
         return(
             <div className="player">
-                <span>X</span>
             </div>
         );
     }
@@ -30,7 +29,7 @@ class Block extends Component {
         // Render Player
         if (props.blockCode[0] === "x"){
             return(
-                <div className={`block_content ${props.blockCode[1]}`}>
+                <div className={`block-content ${props.blockCode[1]}`}>
                     {this.player()}
                 </div>
             );
@@ -52,7 +51,7 @@ class Block extends Component {
     render(){
         return(
             <div className="block" id={this.location}>
-                {this.location}
+                {/* {this.location} */}
                 {this.block_content}
             </div>
         );

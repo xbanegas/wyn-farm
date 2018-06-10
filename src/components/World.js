@@ -134,7 +134,9 @@ class World extends Component {
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
         <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
-        {this.these_rows}
+        <div className="world-rows">
+          {this.these_rows}
+        </div>
         <Inventory playerItems={this.state.player.inventory} />
         <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
       </div>
