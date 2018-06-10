@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Row from './Row';
 import Inventory from './Inventory';
+import Craft from './Craft';
 import {padNum, makeGrid} from '../utils/dataUtils';
 import {genPlayerInitialLoc, chngLocID, genTreeLocs} from '../utils/worldUtils';
 // import logo from '../logo.svg';
@@ -16,6 +17,7 @@ class World extends Component {
     this.state.world.trees = genTreeLocs(this.state.world.size, this.state.world.trees.total);
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
+    this.addCraftToInventory = this.addCraftToInventory.bind(this);
   }
   componentDidUpdate(){
     // console.log("world update");
@@ -56,7 +58,7 @@ class World extends Component {
     }
     this.setState({world: world});
     // Handle Keypresses
-    let worldSize = this.state.world.size
+    let worldSize = this.state.world.size;
     let player = {...this.state.player};
     let currentLoc = player.location;
     switch(e.key){
@@ -83,7 +85,9 @@ class World extends Component {
          */
         let treeLocs = this.state.world.trees.locs
         if(treeLocs.includes(currentLoc)){
-          player.inventory.wood++;
+          player.inventory.forEach((item)=>{
+            if (item.name === "wood") { item.count++; }
+          });
           this.state.world.trees[currentLoc].supply--;
           if (this.state.world.trees[currentLoc].supply === 0){
             delete this.state.world.trees[currentLoc];
@@ -99,17 +103,44 @@ class World extends Component {
     this.makeWorldRows(this.playerLoc, player);
   }
 
+  addCraftToInventory(item){
+    // console.log(this.state);
+    let player = {...this.state.player};
+    let foundItem = false;
+    player.inventory.forEach((playerItem)=>{
+      if (playerItem.name === item.name){
+        playerItem.count++;
+        foundItem = true;
+        player.inventory.forEach((subItem)=>{
+          if (subItem.name === item.remove.name) {
+            subItem.count -= item.remove.count;
+          }
+        });
+      }
+    });
+    if (!foundItem) {
+      let newItem = {name: item.name, count: 1};
+      player.inventory.push(newItem);
+      player.inventory.forEach((subItem)=>{
+        if (subItem.name === item.remove.name) {
+          subItem.count -= item.remove.count;
+        }
+      });
+    }
+    this.setState({player});
+  }
+
   render() {
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
         <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
         {this.these_rows}
         <Inventory playerItems={this.state.player.inventory} />
+        <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
       </div>
 
     );
   }
 }
 
-export{padNum};
 export default World;

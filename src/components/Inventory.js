@@ -9,12 +9,11 @@ class Inventory extends Component {
 
     renderItemDivs(){
         let item_divs = [];
-        // console.log(this.props.playerItems);
         let items = this.props.playerItems;
-        for (let item in items){
+        for (let item of items){
             item_divs.push(
-                <div key={item} className="item">
-                    {item}: {items[item]}
+                <div key={item.name} className="item">
+                    {item.name}: {item.count}
                 </div>
                 );
         }

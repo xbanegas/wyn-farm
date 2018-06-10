@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {padNum} from './World';
+import {padNum} from '../utils/dataUtils';
 import Block from './Block';
 import '../css/Row.css';
 
