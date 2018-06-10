@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import '../css/Craft.css'
 
 class Craft extends Component {
     renderCraftable(){
@@ -8,15 +8,15 @@ class Craft extends Component {
         this.props.playerItems.forEach((item)=>{
             if(item.name === "wood"){ woodCount = item.count }
         });
-        let craftableAxes = Math.floor(woodCount / 5);
+        let craftableAxes = Math.floor(woodCount / 4);
         if (craftableAxes > 0){
             craftables.push(
                 <div class="craftable" onClick={() => {
-                    let item = {name: "Wooden Pickaxe", remove: {name: "wood", count: 5}};
+                    let item = {name: "Wooden Axe", remove: {name: "wood", count: 4}};
                     this.props.craft(item)
                     }}>
-                    <h6>Wooden Picaxe</h6>
-                    <div>{craftableAxes}</div>
+                    <h6>Wooden Axe</h6>
+                    <div className="craft-count">{craftableAxes}</div>
                 </div>
             );
         }
@@ -26,7 +26,7 @@ class Craft extends Component {
     render(){
         return(
             <div id="craft">
-                <h4>Crafting</h4>
+                <h4 id="craft-title">Crafting</h4>
                 {this.renderCraftable()}
             </div>
         );

@@ -13,7 +13,8 @@ class Inventory extends Component {
         for (let item of items){
             item_divs.push(
                 <div key={item.name} className="item">
-                    {item.name}: {item.count}
+                    <div class="item-name"><h6>{item.name}</h6></div>
+                    <div class="item-count">{item.count}</div>
                 </div>
                 );
         }
@@ -22,7 +23,7 @@ class Inventory extends Component {
     render(){
         return(
             <div id="inventory">
-                <h4>Inventory</h4>
+                <h4 id="inventoryTitle">Inventory</h4>
                 {this.renderItemDivs()}
             </div>
         );

@@ -1,21 +1,22 @@
-#inventory {
+#craft{
+    background-color: #885624;
     display:flex;
     flex-wrap: wrap;
-    background-color:#EDD67C;
     padding: 10px;
 }
-#inventoryTitle{
+#craft-title{
     width:100%;
     margin: 0;
 }
-
-.item{
+.craftable{
     height:50px;
     width: 50px;
     border: 1px solid grey;
     padding: 10px;
 }
-
-.item-name h6 {margin: 0;}
-
-.item-count{margin-top: 5px;}
+.craftable h6 {
+    margin: 0;
+}
+.craft-count {
+    margin-top: 5px;
+}
