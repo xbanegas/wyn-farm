@@ -5,22 +5,35 @@ import Craft from './Craft';
 import {padNum, makeGrid} from '../utils/dataUtils';
 import {genPlayerInitialLoc, chngLocID, genTreeLocs} from '../utils/worldUtils';
 // import logo from '../logo.svg';
-import initialData from '../initialData';
+// import initialData from '../initialData';
 import '../css/World.css';
-
+import {connect} from 'react-redux';
+import {setWorld} from '../actions/setWorldActions';
+import { SET_WORLD } from '../actions/types';
 
 class World extends Component {
   constructor(props){
     super(props);
-    this.state = initialData;
-    this.state.player.location = genPlayerInitialLoc(this.state.world.size);
-    this.state.world.trees = genTreeLocs(this.state.world.size, this.state.world.trees.total);
-    this.makeWorldRows(this.state.player.location, this.state.player);
-    this.handleKey = this.handleKey.bind(this);
-    this.addCraftToInventory = this.addCraftToInventory.bind(this);
+    // this.props.setWorld();
+    // this.state = initialData;
+    // this.state.player.location = genPlayerInitialLoc(this.state.world.size);
+    // this.state.world.trees = genTreeLocs(this.state.world.size, this.state.world.trees.total);
+    // this.makeWorldRows(this.state.player.location, this.state.player);
+    // this.handleKey = this.handleKey.bind(this);
+    // this.addCraftToInventory = this.addCraftToInventory.bind(this);
   }
+
+  componentWillMount(){
+    this.props.setWorld(undefined, SET_WORLD);
+    console.log(this.props);
+  }
+
   componentDidUpdate(){
     // console.log("world update");
+    // this.props.setWorld();
+  }
+  componentDidMount(){
+    // console.log(this.props);
   }
 
   makeWorldRows(playerLoc, player){
@@ -131,18 +144,24 @@ class World extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
-      <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
-        <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
-        <div className="world-rows">
-          {this.these_rows}
+        <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
+          <div id="dayCount"><h4>Day: {this.props.world.dayCount}</h4></div>
+          <div className="world-rows">
+            {this.these_rows}
+          </div>
+          <Inventory playerItems={this.props.player.inventory} />
+          <Craft playerItems={this.props.player.inventory} craft={this.addCraftToInventory} />
         </div>
-        <Inventory playerItems={this.state.player.inventory} />
-        <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
-      </div>
-
     );
   }
 }
 
-export default World;
+const mapStateToProps = state => ({
+    world: state.worldData.world,
+    player: state.worldData.player
+});
+
+
+export default connect(mapStateToProps, {setWorld})(World);
