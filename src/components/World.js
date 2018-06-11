@@ -12,43 +12,53 @@ import {
 import Instructions from './Instructions';
 import initialData from '../initialData';
 import '../css/World.css';
-
+import {connect} from 'react-redux';
+import {setWorld} from '../actions/setWorldActions';
+import { SET_WORLD } from '../actions/types';
 
 class World extends Component {
   constructor(props){
     super(props);
-    this.state = initialData;
-    let worldSize = this.state.world.size - 1;
+    let worldSize = this.props.world.size - 1;
     this.gaussGen = gaussGen(worldSize/2, worldSize/4);
-    this.state.player.location = genPlayerInitialLoc(worldSize, this.gaussGen);
-    this.state.world.trees = genTreeLocs(worldSize, this.gaussGen, this.state.world.trees.total);
-    this.state.world.carrots = genCarrotLocs(worldSize, this.gaussGen, this.state.world.carrots.total);
-    this.makeWorldRows(this.state.player.location, this.state.player);
+    this.props.player.location = genPlayerInitialLoc(this.props.world.size, this.gaussGen);
+    this.props.world.trees = genTreeLocs(this.props.world.size, this.gaussGen, this.props.world.trees.total);
+    this.props.world.carrots = genCarrotLocs(worldSize, this.gaussGen, this.props.world.carrots.total);
+    this.makeWorldRows(this.props.player.location, this.props.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
-    this.instructionsModal = this.instructionsModal.bind(this);
   }
+
+  componentWillMount(){
+    this.props.setWorld(initialData, SET_WORLD);
+    console.log(this.props);
+  }
+
   componentDidUpdate(){
     // console.log("world update");
+    // this.props.setWorld();
+  }
+  componentDidMount(){
+    // console.log(this.props);
   }
 
   makeWorldRows(playerLoc, player){
-    this.grid = makeGrid(this.state.world.size);
+    this.grid = makeGrid(this.props.world.size);
     this.these_rows = [];
-    let treeLocs = this.state.world.trees.locs;
-    let trees = this.state.world.trees;
-    let carrotLocs = this.state.world.carrots.locs;
-    let carrots = this.state.world.carrots;
-    let wallLocs = this.state.world.wallLocs;
-    let creepLocs = this.state.world.creeps.locs;
-    let creeps = this.state.world.creeps;
+    let treeLocs = this.props.world.trees.locs;
+    let trees = this.props.world.trees;
+    let carrotLocs = this.props.world.carrots.locs;
+    let carrots = this.props.world.carrots;
+    let wallLocs = this.props.world.wallLocs;
+    let creepLocs = this.props.world.creeps.locs;
+    let creeps = this.props.world.creeps;
     this.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row 
           key={i} 
           styleName={`row row-${i}`} 
-          worldSize={this.state.world.size} 
-          dayCount={this.state.world.dayCount}
+          worldSize={this.props.world.size} 
+          dayCount={this.props.world.dayCount}
           playerLoc={playerLoc} 
           treeLocs={treeLocs}
           trees={trees}
@@ -70,8 +80,8 @@ class World extends Component {
     /**
      * @todo move clock to worldutils
      */
-    let world = {...this.state.world};
-    let player = {...this.state.player};
+    let world = {...this.props.world};
+    let player = {...this.props.player};
     world.moveCount++;
     let moveCount = world.moveCount;
     if (!(moveCount < world.dayInterval)){ 
@@ -84,7 +94,7 @@ class World extends Component {
     // creeps from move day after spawn
     if (world.dayCount > 3) {
       world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
-        return moveRandomAdjacent(this.state.world.size, creepLoc, this.state.world.wallLocs);
+        return moveRandomAdjacent(this.props.world.size, creepLoc, this.props.world.wallLocs);
       });
       /**
        * @todo creeps cant move through walls 
@@ -94,20 +104,20 @@ class World extends Component {
     this.setState({player: player});
     // gen Creeps
     if (world.dayCount === 3){
-      world = {...this.state.world};
+      world = {...this.props.world};
       if (world.creeps.locs.length === 0) {
-        world.creeps = genCreepLocs(this.gaussGen, this.state.world.creeps.total);
+        world.creeps = genCreepLocs(this.gaussGen, this.props.world.creeps.total);
         this.setState({world});
       }
     }
 
     // Handle Keypresses
-    let worldSize = this.state.world.size;
+    let worldSize = this.props.world.size;
     let currentLoc = player.location;
     let keyPressed = e.key
-    let thisItemSelection = this.state.player.itemSelected;
+    let thisItemSelection = this.props.player.itemSelected;
     let newLocID = "";
-    let wallLocs = this.state.world.wallLocs;
+    let wallLocs = this.props.world.wallLocs;
     switch(keyPressed){
       case "w":
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
@@ -135,22 +145,22 @@ class World extends Component {
          * @todo farming to worldUtils
          */
         // handle tree farming
-        let treeLocs = this.state.world.trees.locs;
+        let treeLocs = this.props.world.trees.locs;
         if(treeLocs.includes(currentLoc)){
           player.inventory.forEach((item)=>{
             if (item.name === "wood") { item.count++; }
           });
           if(world.trees[currentLoc]){ world.trees[currentLoc].supply-- };
           this.setState({world});
-          if (this.state.world.trees[currentLoc] && this.state.world.trees[currentLoc].supply === 0){
+          if (this.props.world.trees[currentLoc] && this.props.world.trees[currentLoc].supply === 0){
             delete world.trees[currentLoc];
             treeLocs.splice(treeLocs.indexOf(currentLoc),1);
             this.setState({world});
           }
         }
         // handle carrot farming
-        let carrotLocs = this.state.world.carrots.locs;
-        if(this.state.world.carrots[currentLoc]){
+        let carrotLocs = this.props.world.carrots.locs;
+        if(this.props.world.carrots[currentLoc]){
           let playerHasCarrots = false;
           player.inventory.forEach((item)=>{
             if (item.name === "carrot") { item.count++; playerHasCarrots = true;}
@@ -158,7 +168,7 @@ class World extends Component {
           if (!playerHasCarrots) { player.inventory.push({name: "carrot", count: 1}) }
           if(world.carrots[currentLoc]){world.carrots[currentLoc].supply--;}
           this.setState({world});
-          if (this.state.world.carrots[currentLoc] && this.state.world.carrots[currentLoc].supply === 0){
+          if (this.props.world.carrots[currentLoc] && this.props.world.carrots[currentLoc].supply === 0){
             delete world.carrots[currentLoc];
             carrotLocs.splice(treeLocs.indexOf(currentLoc),1);
             this.setState({world});
@@ -210,14 +220,14 @@ class World extends Component {
         // Handle carrot planting
         if (player.inventory[thisItemSelection].name === "carrot" 
         && player.inventory[thisItemSelection].count > 0){
-          let carrots = {...this.state.world.carrots};
+          let carrots = {...this.props.world.carrots};
           carrots.locs.push(currentLoc);
           let newCarrot = {
             location: currentLoc, 
             supply: 3, 
-            matureDay: this.state.world.dayCount + 3
+            matureDay: this.props.world.dayCount + 3
           };
-          this.state.world.carrots[currentLoc] = newCarrot;
+          this.props.world.carrots[currentLoc] = newCarrot;
           this.setState({carrots});
           player.inventory[thisItemSelection].count--;
           this.setState({player});
@@ -225,7 +235,7 @@ class World extends Component {
         // Handle Wall Building
         if (player.inventory[thisItemSelection].name === "wall" 
         && player.inventory[thisItemSelection].count > 0) {
-          this.state.world.wallLocs.push(currentLoc);
+          this.props.world.wallLocs.push(currentLoc);
           player.inventory[thisItemSelection].count--;
           this.setState({player});
         }
@@ -243,8 +253,8 @@ class World extends Component {
       default: 
         break;
       }
-    // if (isAdjacent(this.worldSize, this.playerLoc, this.state.world.trees.locs)){}
-    this.state.world.creeps.locs.forEach(function(creepLocID){
+    // if (isAdjacent(this.worldSize, this.playerLoc, this.props.world.trees.locs)){}
+    this.props.world.creeps.locs.forEach(function(creepLocID){
       let isNextToCreep = isAdjacent(world.size, creepLocID, player.location);
       if(isNextToCreep){
         player.health--;
@@ -255,8 +265,8 @@ class World extends Component {
   }
 
   addCraftToInventory(item){
-    // console.log(this.state);
-    let player = {...this.state.player};
+    // console.log(this.props);
+    let player = {...this.props.player};
     let foundItem = false;
     player.inventory.forEach((playerItem)=>{
       if (playerItem.name === item.name){
@@ -282,8 +292,8 @@ class World extends Component {
   }
 
   instructionsModal(){
-    this.state.world.instructions += 1;
-    let instructions = {...this.state.world.instructions};
+    this.props.world.instructions += 1;
+    let instructions = {...this.props.world.instructions};
     instructions += 1
     this.setState({instructions});
   }
@@ -292,7 +302,7 @@ class World extends Component {
     return(
       <div id="instructionToggle">
         <div id="toggleButton"><button href="#" onClick={this.instructionsModal}>Instructions</button></div>
-        <div style={this.state.world.instructionStyle[this.state.world.instructions % 2]}>
+        <div style={this.props.world.instructionStyle[this.props.world.instructions % 2]}>
           <Instructions />
         </div>
       </div>
@@ -300,32 +310,38 @@ class World extends Component {
   };
 
   render() {
-    if (this.state.player.health > 0){
+    if (this.props.player.health > 0){
       return (
         <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
           {this.addInstructionsModal()}
           <div id="header">
             <div id="dayCount">
-              <h4>Day: {this.state.world.dayCount}</h4>
+              <h4>Day: {this.props.world.dayCount}</h4>
             </div>
             <div id="playerHealth">
-              <h4>Health: </h4><div>{"*".repeat(this.state.player.health)}</div>
+              <h4>Health: </h4><div>{"*".repeat(this.props.player.health)}</div>
             </div>
           </div>
           <div className="world-rows">
             {this.these_rows}
           </div>
-          <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
-          <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
+          <Inventory playerItems={this.props.player.inventory} itemSelected={this.props.player.itemSelected} />
+          <Craft playerItems={this.props.player.inventory} craft={this.addCraftToInventory} />
           <div id="codeLink"><a href="https://github.com/xbanegas/wyn-farm">code</a></div>
         </div>
       );
-    } else if (this.state.player.health === 0) {
+    } else if (this.props.player.health === 0) {
       return (
-        <div>You died on day {this.state.world.dayCount}</div>
+        <div>You died on day {this.props.world.dayCount}</div>
       );
     }
   }
 }
 
-export default World;
+const mapStateToProps = state => ({
+    world: state.worldData.world,
+    player: state.worldData.player
+});
+
+
+export default connect(mapStateToProps, {setWorld})(World);

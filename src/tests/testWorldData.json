@@ -1,0 +1,48 @@
+{
+    "world": {
+        "instructions": 0,
+        "instructionStyle": [{"display": "none"},{"display": "block"}],
+        "size": 10,
+        "dayCount": 0,
+        "dayInterval": 24,
+        "moveCount": 0,
+        "grid":[],
+        "trees":{
+            "total": 10,
+            "trees": []
+        },
+        "carrots":{
+            "total": 3,
+            "carrots": []
+        },
+        "wallLocs": [],
+        "creeps": {
+            "total": 3,
+            "creeps": [],
+            "locs": []
+        }
+    },
+    "player": {
+      "id": "298323",
+      "location": "",
+      "name": "kidA",
+      "hunger": 0,
+      "health": 10,
+      "coins":0,
+      "inventory":[
+          {
+              "name": "wood",
+              "count": 0
+          },
+          {
+              "name": "carrot",
+              "count": 0
+          },
+          {
+              "name": "wall",
+              "count": 0
+          }
+      ],
+      "itemSelected": 0
+    }
+}
