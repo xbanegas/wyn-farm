@@ -19,3 +19,5 @@
 .item-name h6 {margin: 0;}
 
 .item-count{margin-top: 5px;}
+
+.item.selected{ border:2px solid black; }

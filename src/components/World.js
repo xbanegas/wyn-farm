@@ -48,7 +48,7 @@ class World extends Component {
     });
     this.setState({player: player});
   }
-  
+  selectItem(keyPressed){ return keyPressed -1; }
   handleKey(e){
     e.preventDefault();
     // Move Time Forward
@@ -69,7 +69,8 @@ class World extends Component {
     // Handle Keypresses
     let worldSize = this.state.world.size;
     let currentLoc = player.location;
-    switch(e.key){
+    let keyPressed = e.key
+    switch(keyPressed){
       case "w":
         player.location = chngLocID(worldSize, currentLoc, "vert", -1);
         this.playerLoc = player.location;
@@ -110,7 +111,6 @@ class World extends Component {
           player.inventory.forEach((item)=>{
             if (item.name === "carrot") { item.count++; playerHasCarrots = true;}
           });
-          let thisCarrot = this.state.world.carrots[currentLoc];
           if (!playerHasCarrots) { player.inventory.push({name: "carrot", count: 1}) }
           this.state.world.carrots[currentLoc].supply--;
           if (this.state.world.carrots[currentLoc].supply === 0){
@@ -119,11 +119,47 @@ class World extends Component {
           }
         }
         break;
+      case "1":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "2":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "3":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "4":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "5":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "6":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "7":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "8":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
+      case "9":
+        player.itemSelected = this.selectItem(keyPressed);
+        this.setState({player});
+        break;
       default: 
         break;
       }
       
-
+    console.log(player);
     this.makeWorldRows(this.playerLoc, player);
   }
 
@@ -155,6 +191,7 @@ class World extends Component {
   }
 
   render() {
+    console.log(this.state.player.itemSelected);
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
       <div id="header">
@@ -164,7 +201,7 @@ class World extends Component {
         <div className="world-rows">
           {this.these_rows}
         </div>
-        <Inventory playerItems={this.state.player.inventory} />
+        <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
         <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
       </div>
 
