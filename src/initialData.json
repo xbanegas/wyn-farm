@@ -12,7 +12,8 @@
         "carrots":{
             "total": 3,
             "carrots": []
-        }
+        },
+        "wallLocs": []
     },
     "player": {
       "id": "298323",

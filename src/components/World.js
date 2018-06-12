@@ -32,6 +32,7 @@ class World extends Component {
     let trees = this.state.world.trees;
     let carrotLocs = this.state.world.carrots.locs;
     let carrots = this.state.world.carrots;
+    let wallLocs = this.state.world.wallLocs;
     this.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row 
@@ -45,6 +46,7 @@ class World extends Component {
           rowNum={padNum(i)}
           carrotLocs={carrotLocs}
           carrots={carrots}
+          wallLocs={wallLocs}
         />
       );
     });
@@ -75,22 +77,35 @@ class World extends Component {
     let currentLoc = player.location;
     let keyPressed = e.key
     let thisItemSelection = this.state.player.itemSelected;
+    let newLocID = "";
     console.log(this.state.world.carrots);
     switch(keyPressed){
       case "w":
-        player.location = chngLocID(worldSize, currentLoc, "vert", -1);
+        newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
+        if(!this.state.world.wallLocs.includes(newLocID)){
+          player.location = newLocID
+        }
         this.playerLoc = player.location;
         break;
       case "a":
-        player.location = chngLocID(worldSize, currentLoc, "horiz", -1);
+        newLocID =  chngLocID(worldSize, currentLoc, "horiz", -1);
+        if(!this.state.world.wallLocs.includes(newLocID)){
+          player.location = newLocID
+        }
         this.playerLoc = player.location;
         break;
       case "s":
-        player.location = chngLocID(worldSize, currentLoc, "vert", 1);
+        newLocID = chngLocID(worldSize, currentLoc, "vert", 1);
+        if(!this.state.world.wallLocs.includes(newLocID)){
+          player.location = newLocID
+        }
         this.playerLoc = player.location;
         break;
       case "d":
-        player.location = chngLocID(worldSize, currentLoc, "horiz", 1);
+        newLocID = chngLocID(worldSize, currentLoc, "horiz", 1);
+        if(!this.state.world.wallLocs.includes(newLocID)){
+          player.location = newLocID
+        }
         this.playerLoc = player.location;
         break;
       case "f":
@@ -184,7 +199,8 @@ class World extends Component {
         }
         // Handle Wall Building
         if (player.inventory[thisItemSelection].name === "wall") {
-          console.log('wall');
+          this.state.world.wallLocs.push(currentLoc);
+          this.state.player.inventory[thisItemSelection]--;
         }
         break;
       // Handle Eating items
