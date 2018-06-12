@@ -28,6 +28,7 @@ class Row extends Component {
             if(props.treeLocs.includes(blockID)){
                 blockCode[1] = "33";
             }
+            // register carrot block
             if(props.carrotLocs.includes(blockID)){ blockCode[1] = "44" }
             this.these_blocks.push(<Block key={blockID} blockCode={blockCode} blockID={blockID}/>);
         }

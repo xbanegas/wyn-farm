@@ -55,7 +55,7 @@ class Block extends Component {
     render(){
         return(
             <div className="block" id={this.location}>
-                {/* {this.location} */}
+                {this.location}
                 {this.block_content}
             </div>
         );

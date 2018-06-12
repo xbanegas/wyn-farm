@@ -157,10 +157,28 @@ class World extends Component {
         player.itemSelected = this.selectItem(keyPressed);
         this.setState({player});
         break;
-      
+
+      // Handle Using Items
       case ' ':
         console.log('using item');
-
+        // and eventually check if block is empty
+        let carrots = {...this.state.world.carrots};
+        if (player.inventory[thisItemSelection].name === "carrot"){
+          carrots.locs.push(currentLoc);
+          let newCarrot = {
+            location:currentLoc, 
+            count: 3, 
+            matureDay: this.state.world.dayCount + 3
+          };
+          carrots[currentLoc] = newCarrot;
+          console.log(carrots);
+          player.inventory[thisItemSelection].count--;
+        }
+        console.log(carrots);
+        this.setState({carrots});
+        this.setState({player});
+        break;
+      // Handle Eating items
       case 'e':
         console.log('eating item ');
         if (player.inventory[thisItemSelection].name === "carrot"){
@@ -205,6 +223,7 @@ class World extends Component {
   }
 
   render() {
+    console.log(this.state.world.carrots);
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
       <div id="header">
