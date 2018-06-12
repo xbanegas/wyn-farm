@@ -8,6 +8,10 @@
         "trees":{
             "total": 10,
             "trees": []
+        },
+        "carrots":{
+            "total": 3,
+            "carrots": []
         }
     },
     "player": {

@@ -52,5 +52,21 @@ const genTreeLocs = (worldSize, total) => {
     return trees
 };
 
+const genCarrotLocs = (worldSize, total) => {
+    let halfSize = (worldSize -1) / 2;
+    let gaussGen = genGauss(halfSize, halfSize/2);
+    let carrotLocs = [];
+    for (let i = 0; i < total; i++) {
+        let x = Math.floor(gaussGen());
+        let y = Math.floor(gaussGen());
+        carrotLocs.push(`${padNum(x)}${padNum(y)}`)
+    }
+    let carrots = {locs: carrotLocs};
+    carrotLocs.forEach((carrotLoc)=>{
+        carrots[carrotLoc] = {location: carrotLoc, supply: 3};
+    });
+    return carrots
+}
 
-export {chngLocID, containsPlayer, genPlayerInitialLoc, genTreeLocs};
+
+export {chngLocID, containsPlayer, genPlayerInitialLoc, genTreeLocs, genCarrotLocs};

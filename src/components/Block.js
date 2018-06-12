@@ -39,6 +39,10 @@ class Block extends Component {
                 <div className="block_content tree">TREE</div>
             );
         // Else Render Grass
+        } else if (props.blockCode[1] === "44") {
+            return (
+                <div className="block_content carrot">CARROT</div>
+            );
         } else {
             return(
                 <div className={`block_content ${props.blockCode[1]}`}>
