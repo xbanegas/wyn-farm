@@ -75,7 +75,7 @@ class World extends Component {
     let currentLoc = player.location;
     let keyPressed = e.key
     let thisItemSelection = this.state.player.itemSelected;
-
+    console.log(this.state.world.carrots);
     switch(keyPressed){
       case "w":
         player.location = chngLocID(worldSize, currentLoc, "vert", -1);
@@ -163,9 +163,11 @@ class World extends Component {
         break;
 
       // Handle Using Items
+      // and eventually check if block is empty
+
       case ' ':
         console.log('using item');
-        // and eventually check if block is empty
+        // Handle carrot planting
         if (player.inventory[thisItemSelection].name === "carrot"){
           let carrots = {...this.state.world.carrots};
           carrots.locs.push(currentLoc);
@@ -179,6 +181,10 @@ class World extends Component {
           console.log(carrots);
           player.inventory[thisItemSelection].count--;
           this.setState({player});
+        }
+        // Handle Wall Building
+        if (player.inventory[thisItemSelection].name === "wall") {
+          console.log('wall');
         }
         break;
       // Handle Eating items

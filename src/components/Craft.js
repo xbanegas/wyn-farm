@@ -9,6 +9,7 @@ class Craft extends Component {
             if(item.name === "wood"){ woodCount = item.count }
         });
         let craftableAxes = Math.floor(woodCount / 4);
+        let craftableWalls = Math.floor(woodCount / 9);
         if (craftableAxes > 0){
             craftables.push(
                 <div class="craftable" onClick={() => {
@@ -17,6 +18,17 @@ class Craft extends Component {
                     }}>
                     <h6>Wooden Axe</h6>
                     <div className="craft-count">{craftableAxes}</div>
+                </div>
+            );
+        }
+        if (craftableWalls > 0){
+            craftables.push(
+                <div class="craftable" onClick={() => {
+                    let item = {name: "wall", remove: {name: "wood", count: 9}};
+                    this.props.craft(item)
+                    }}>
+                    <h6>Wall</h6>
+                    <div className="craft-count">{craftableWalls}</div>
                 </div>
             );
         }
