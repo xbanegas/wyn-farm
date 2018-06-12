@@ -29,7 +29,11 @@ class Row extends Component {
                 blockCode[1] = "33";
             }
             // register carrot block
-            if(props.carrotLocs.includes(blockID)){ blockCode[1] = "44" }
+            if(
+                (props.carrotLocs.includes(blockID)) && 
+                (this.props.dayCount >= this.props.carrots[blockID].matureDay ) ){ 
+                blockCode[1] = "44" 
+            }
             this.these_blocks.push(<Block key={blockID} blockCode={blockCode} blockID={blockID}/>);
         }
     }

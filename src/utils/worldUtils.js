@@ -63,7 +63,7 @@ const genCarrotLocs = (worldSize, total) => {
     }
     let carrots = {locs: carrotLocs};
     carrotLocs.forEach((carrotLoc)=>{
-        carrots[carrotLoc] = {location: carrotLoc, supply: 3};
+        carrots[carrotLoc] = {location: carrotLoc, supply: 3, matureDay: 0};
     });
     return carrots
 }

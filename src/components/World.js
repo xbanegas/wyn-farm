@@ -19,6 +19,7 @@ class World extends Component {
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
+    console.log(this.state.player.health);
   }
   componentDidUpdate(){
     // console.log("world update");
@@ -37,6 +38,7 @@ class World extends Component {
           key={i} 
           styleName={`row row-${i}`} 
           worldSize={this.state.world.size} 
+          dayCount={this.state.world.dayCount}
           playerLoc={playerLoc} 
           treeLocs={treeLocs}
           trees={trees}
@@ -162,21 +164,19 @@ class World extends Component {
       case ' ':
         console.log('using item');
         // and eventually check if block is empty
-        let carrots = {...this.state.world.carrots};
         if (player.inventory[thisItemSelection].name === "carrot"){
+          let carrots = {...this.state.world.carrots};
           carrots.locs.push(currentLoc);
           let newCarrot = {
-            location:currentLoc, 
+            location: currentLoc, 
             count: 3, 
             matureDay: this.state.world.dayCount + 3
           };
-          carrots[currentLoc] = newCarrot;
+          this.state.world.carrots[currentLoc] = newCarrot;
           console.log(carrots);
           player.inventory[thisItemSelection].count--;
+          this.setState({player});
         }
-        console.log(carrots);
-        this.setState({carrots});
-        this.setState({player});
         break;
       // Handle Eating items
       case 'e':
@@ -223,21 +223,27 @@ class World extends Component {
   }
 
   render() {
-    console.log(this.state.world.carrots);
-    return (
-      <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
-      <div id="header">
-        <div id="playerHealth">Health: {this.state.player.health}</div>
-        <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
-      </div>
-        <div className="world-rows">
-          {this.these_rows}
+    console.log(this.state.player.health);
+    if (this.state.player.health > 0){
+      return (
+        <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
+        <div id="header">
+          <div id="playerHealth">Health: {this.state.player.health}</div>
+          <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
         </div>
-        <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
-        <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
-      </div>
+          <div className="world-rows">
+            {this.these_rows}
+          </div>
+          <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
+          <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
+        </div>
 
-    );
+      );
+    } else if (this.state.player.health === 0) {
+      return (
+        <div>You died :(</div>
+      );
+    }
   }
 }
 
