@@ -70,6 +70,8 @@ class World extends Component {
     let worldSize = this.state.world.size;
     let currentLoc = player.location;
     let keyPressed = e.key
+    let thisItemSelection = this.state.player.itemSelected;
+
     switch(keyPressed){
       case "w":
         player.location = chngLocID(worldSize, currentLoc, "vert", -1);
@@ -155,11 +157,23 @@ class World extends Component {
         player.itemSelected = this.selectItem(keyPressed);
         this.setState({player});
         break;
+      
+      case ' ':
+        console.log('using item');
+
+      case 'e':
+        console.log('eating item ');
+        if (player.inventory[thisItemSelection].name === "carrot"){
+          if (player.health <10){ 
+            player.health++; 
+            player.inventory[thisItemSelection].count--;
+            this.setState({player});
+          }
+        }
       default: 
         break;
       }
       
-    console.log(player);
     this.makeWorldRows(this.playerLoc, player);
   }
 
@@ -191,7 +205,6 @@ class World extends Component {
   }
 
   render() {
-    console.log(this.state.player.itemSelected);
     return (
       <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
       <div id="header">

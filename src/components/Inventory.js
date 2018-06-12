@@ -13,8 +13,7 @@ class Inventory extends Component {
         let itemSelectedClass = "";
         let itemSelected = this.props.itemSelected;
         for (let [i, item] of items.entries()){
-            console.log(`item selected ${itemSelected}`);
-            itemSelectedClass = this.props.itemSelected === i ? "selected" : "";
+            itemSelectedClass = itemSelected === i ? "selected" : "";
             item_divs.push(
                 <div key={item.name} className={`item ${itemSelectedClass}`}>
                     <div class="item-name"><h6>{item.name}</h6></div>
