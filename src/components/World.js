@@ -64,6 +64,8 @@ class World extends Component {
     if (!(moveCount < world.dayInterval)){ 
       world.moveCount = 0;
       world.dayCount++;
+    }
+    if (moveCount%10===0) {
       player.health--;
     }
     this.setState({world: world});
@@ -110,7 +112,7 @@ class World extends Component {
         }
         // handle carrot farming
         let carrotLocs = this.state.world.carrots.locs;
-        if(carrotLocs.includes(currentLoc)){
+        if(this.state.world.carrots[currentLoc]){
           let playerHasCarrots = false;
           player.inventory.forEach((item)=>{
             if (item.name === "carrot") { item.count++; playerHasCarrots = true;}
@@ -169,10 +171,11 @@ class World extends Component {
           carrots.locs.push(currentLoc);
           let newCarrot = {
             location: currentLoc, 
-            count: 3, 
+            supply: 3, 
             matureDay: this.state.world.dayCount + 3
           };
           this.state.world.carrots[currentLoc] = newCarrot;
+          this.setState({carrots});
           console.log(carrots);
           player.inventory[thisItemSelection].count--;
           this.setState({player});
