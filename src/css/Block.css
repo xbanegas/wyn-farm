@@ -23,3 +23,7 @@
 .creep {
     background-color: purple;
 }
+
+.wall {
+    background-color: gray;
+}

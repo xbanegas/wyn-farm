@@ -81,6 +81,9 @@ class World extends Component {
       world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
         return moveRandomAdjacent(worldSize, creepLoc);
       });
+      /**
+       * @todo creeps cant move through walls 
+       */
     }
     this.setState({world: world});
     this.setState({player: player});
@@ -226,7 +229,7 @@ class World extends Component {
       case 'e':
         console.log('eating item ');
         if (player.inventory[thisItemSelection].name === "carrot"){
-          if (player.health <10){ 
+          if (player.health <10 && player.inventory[thisItemSelection].count > 0){ 
             player.health++; 
             player.inventory[thisItemSelection].count--;
             this.setState({player});
