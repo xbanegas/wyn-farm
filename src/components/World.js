@@ -8,6 +8,7 @@ import {
   genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent
 } from '../utils/worldUtils';
 // import logo from '../logo.svg';
+import Instructions from './Instructions';
 import initialData from '../initialData';
 import '../css/World.css';
 
@@ -22,6 +23,7 @@ class World extends Component {
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
+    this.instructionsModal = this.instructionsModal.bind(this);
   }
   componentDidUpdate(){
     // console.log("world update");
@@ -276,25 +278,44 @@ class World extends Component {
     this.setState({player});
   }
 
+  instructionsModal(){
+    this.state.world.instructions += 1;
+    let instructions = {...this.state.world.instructions};
+    instructions += 1
+    this.setState({instructions});
+  }
+
+  addInstructionsModal(){
+    return(
+      <div id="instructionToggle">
+        <div id="toggleButton"><button href="#" onClick={this.instructionsModal}>Instructions</button></div>
+        <div style={this.state.world.instructionStyle[this.state.world.instructions % 2]}>
+          <Instructions />
+        </div>
+      </div>
+    );
+  };
+
   render() {
     if (this.state.player.health > 0){
       return (
         <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
-        <div id="header">
-          <div id="dayCount">
-            <h4>Day: {this.state.world.dayCount}</h4>
+          {this.addInstructionsModal()}
+          <div id="header">
+            <div id="dayCount">
+              <h4>Day: {this.state.world.dayCount}</h4>
+            </div>
+            <div id="playerHealth">
+              <h4>Health: </h4><div>{"*".repeat(this.state.player.health)}</div>
+            </div>
           </div>
-          <div id="playerHealth">
-            <h4>Health: </h4><div>{"*".repeat(this.state.player.health)}</div>
-          </div>
-        </div>
           <div className="world-rows">
             {this.these_rows}
           </div>
           <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
           <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
-        </div>
 
+        </div>
       );
     } else if (this.state.player.health === 0) {
       return (

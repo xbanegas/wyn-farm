@@ -1,5 +1,7 @@
 {
     "world": {
+        "instructions": 0,
+        "instructionStyle": [{"display": "none"},{"display": "block"}],
         "size": 10,
         "dayCount": 0,
         "dayInterval": 24,
