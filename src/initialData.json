@@ -31,6 +31,14 @@
           {
               "name": "wood",
               "count": 0
+          },
+          {
+              "name": "carrot",
+              "count": 0
+          },
+          {
+              "name": "wall",
+              "count": 0
           }
       ],
       "itemSelected": 0

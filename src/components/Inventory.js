@@ -19,7 +19,7 @@ class Inventory extends Component {
                     <div class="item-name"><h6>{item.name}</h6></div>
                     <div class="item-count">{item.count}</div>
                 </div>
-                );
+            );
         }
         return item_divs
     }

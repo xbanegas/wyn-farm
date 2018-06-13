@@ -79,7 +79,7 @@ class World extends Component {
     // creeps from move day after spawn
     if (world.dayCount > 3) {
       world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
-        return moveRandomAdjacent(this.state.world.size, creepLoc);
+        return moveRandomAdjacent(this.state.world.size, creepLoc, this.state.world.wallLocs);
       });
       /**
        * @todo creeps cant move through walls 

@@ -24,23 +24,19 @@ const isAdjacent = (worldSize, locA, locB) => {
     return false;
 }
 
-const moveRandomAdjacent = (worldSize, locID) => {
-    let choice = Math.floor(Math.random()*4);
-    let directions = [["vert", 1], ["vert", -1], ["horiz", 1], ["horiz", -1]];
-    let newLoc = chngLocID(worldSize, locID, directions[choice][0], directions[choice][1]);
-    return newLoc
+const locHasWall = (locID, wallLocs) => {
+    return wallLocs.includes(locID) ? true : false
 }
 
-/**
- * Returns a new location in given direction avoiding walls
- * @param {Number} worldSize - length of dimension of world
- * @param {Number} locID - locationID to move from
- * @param {Array} direction - [0]: "horiz" || "vert", [1]: <number> of steps
- * @param {Array} wallLocs - locationID of walls
- */
-// const moveCharacter = (worldSize, locID, direction, wallLocs) => {
-
-// }
+const moveRandomAdjacent = (worldSize, locID, wallLocs) => {
+    let directions = [["vert", 1], ["vert", -1], ["horiz", 1], ["horiz", -1]];
+    let newLoc = "";
+    do {
+        let choice = Math.floor(Math.random()*4);
+        newLoc = chngLocID(worldSize, locID, directions[choice][0], directions[choice][1]);
+    } while(locHasWall(newLoc, wallLocs))
+    return newLoc
+}
 
 const containsPlayer = (blockCode) => {
     try{
