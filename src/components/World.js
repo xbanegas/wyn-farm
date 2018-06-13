@@ -216,7 +216,6 @@ class World extends Component {
           };
           this.state.world.carrots[currentLoc] = newCarrot;
           this.setState({carrots});
-          console.log(carrots);
           player.inventory[thisItemSelection].count--;
           this.setState({player});
         }
@@ -224,7 +223,8 @@ class World extends Component {
         if (player.inventory[thisItemSelection].name === "wall" 
         && player.inventory[thisItemSelection].count > 0) {
           this.state.world.wallLocs.push(currentLoc);
-          this.state.player.inventory[thisItemSelection]--;
+          player.inventory[thisItemSelection].count--;
+          this.setState({player});
         }
         break;
       // Handle Eating items
