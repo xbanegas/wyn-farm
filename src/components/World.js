@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
 import Row from './Row';
 import Inventory from './Inventory';
 import Craft from './Craft';
@@ -276,24 +281,46 @@ class World extends Component {
     this.setState({player});
   }
 
+  World = ({match}) => (
+    <div>
+    <div id="header">
+    <div id="dayCount">
+      <h4>Day: {this.state.world.dayCount}</h4>
+    </div>
+    <div id="playerHealth">
+      <h4>Health: </h4><div>{"*".repeat(this.state.player.health)}</div>
+    </div>
+  </div>
+  <div className="world-rows">
+    {this.these_rows}
+  </div>
+  </div>
+  );
+
+
+  About = ({match}) => (
+    <div>hello</div>
+  );
+
   render() {
     if (this.state.player.health > 0){
       return (
+        
         <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
-        <div id="header">
-          <div id="dayCount">
-            <h4>Day: {this.state.world.dayCount}</h4>
-          </div>
-          <div id="playerHealth">
-            <h4>Health: </h4><div>{"*".repeat(this.state.player.health)}</div>
-          </div>
-        </div>
-          <div className="world-rows">
-            {this.these_rows}
-          </div>
+          <Router>
+            <div>
+              <a href="/">Home</a>
+            <a href="/about" >About</a>
+            <Route path="/about" component={this.About}/>
+            <Route path="/" component={this.World}/>
+
+            </div>
+          </Router>
           <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
           <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
+
         </div>
+
 
       );
     } else if (this.state.player.health === 0) {
