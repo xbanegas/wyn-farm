@@ -76,10 +76,10 @@ class World extends Component {
     if (moveCount%10===0) {
       player.health--;
     }
+    // creeps from move day after spawn
     if (world.dayCount > 3) {
-      console.log(world.creeps);
       world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
-        return moveRandomAdjacent(worldSize, creepLoc);
+        return moveRandomAdjacent(this.state.world.size, creepLoc);
       });
       /**
        * @todo creeps cant move through walls 
@@ -205,7 +205,8 @@ class World extends Component {
       case ' ':
         console.log('using item');
         // Handle carrot planting
-        if (player.inventory[thisItemSelection].name === "carrot"){
+        if (player.inventory[thisItemSelection].name === "carrot" 
+        && player.inventory[thisItemSelection].count > 0){
           let carrots = {...this.state.world.carrots};
           carrots.locs.push(currentLoc);
           let newCarrot = {
@@ -220,7 +221,8 @@ class World extends Component {
           this.setState({player});
         }
         // Handle Wall Building
-        if (player.inventory[thisItemSelection].name === "wall") {
+        if (player.inventory[thisItemSelection].name === "wall" 
+        && player.inventory[thisItemSelection].count > 0) {
           this.state.world.wallLocs.push(currentLoc);
           this.state.player.inventory[thisItemSelection]--;
         }
@@ -292,7 +294,7 @@ class World extends Component {
       );
     } else if (this.state.player.health === 0) {
       return (
-        <div>You died :(</div>
+        <div>You died on day {this.state.world.dayCount}</div>
       );
     }
   }
