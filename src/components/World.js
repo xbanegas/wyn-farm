@@ -76,6 +76,12 @@ class World extends Component {
     if (moveCount%10===0) {
       player.health--;
     }
+    if (world.dayCount > 3) {
+      console.log(world.creeps);
+      world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
+        return moveRandomAdjacent(worldSize, creepLoc);
+      });
+    }
     this.setState({world: world});
     this.setState({player: player});
     // gen Creeps
