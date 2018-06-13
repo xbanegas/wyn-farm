@@ -2,7 +2,7 @@
 
 A minecraft inspired 2D survival game. 
 
-
+![my screenshot](https://github.com/xbanegas/wyn-farm/blob/master/farm.png)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
