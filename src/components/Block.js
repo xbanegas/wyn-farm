@@ -26,38 +26,42 @@ class Block extends Component {
     }
 
     makeBlockContent(props){
-        // Render Player
-        if (props.blockCode[0] === "x"){
-            return(
-                <div className={`block-content ${props.blockCode[1]}`}>
-                    {this.player()}
-                </div>
-            );
+        let blockContent = []
         // Render Tree
-        } else if (props.blockCode[1] === "33"){
-            return (
+        if (props.blockCode[1] === "33"){
+            blockContent.push(
                 <div className="block_content tree">TREE</div>
             );
         // Else Render Grass
         } else if (props.blockCode[1] === "44") {
-            return (
+            blockContent.push(
                 <div className="block_content carrot">CARROT</div>
             );
         } else if (props.blockCode[1] === "55") {
-            return (
+            blockContent.push(
                 <div className="block_content wall">WALL</div>
             );
         } else if (props.blockCode[1] === "66") {
-            return (
+            blockContent.push(
                 <div className="block_content creep">CREEP!</div>
             );
         } else {
-            return(
+            blockContent.push(
                 <div className={`block_content ${props.blockCode[1]}`}>
                     <span></span>
                 </div>
             );
         }
+        // Render Player
+        if (props.blockCode[0] === "x"){
+            blockContent.push(
+                // <div className={`block-content ${props.blockCode[1]}`}>
+                <div className="block-content">
+                    {this.player()}
+                </div>
+            );
+        }  
+        return blockContent;
     }
 
     render(){

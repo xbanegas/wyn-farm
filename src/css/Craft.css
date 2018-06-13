@@ -3,6 +3,8 @@
     display:flex;
     flex-wrap: wrap;
     padding: 10px;
+    font-size: 1.3em;
+    border: 5px solid darkgoldenrod;
 }
 #craft-title{
     width:100%;

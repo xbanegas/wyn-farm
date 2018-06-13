@@ -7,16 +7,20 @@
     justify-content:space-between;
     margin-top: 5%;
     padding: 3%;
-    border: 5px solid #BBBAB4;
+    border: 5px solid darkolivegreen;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 13px;
 }
 
-#dayCount{
-    align-self:flex-end;
+#header{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3em;
 }
+#dayCount h4{
+    margin:0;
+}
+#playerHealth {display: flex; }
+#playerHealth h4 {margin: 0; }
+#playerHealth div { min-width: 100px; color:indianred;}
 
-.player {
-    height:24px;
-    width:24px;
-    text-align:center;
-    background: url(../assets/player.png);
-}

@@ -1,12 +1,18 @@
 #inventory {
     display:flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     background-color:#EDD67C;
     padding: 10px;
+    font-size: 1.3em;
+    border: 5px solid darkgoldenrod;
 }
 #inventoryTitle{
     width:100%;
     margin: 0;
+}
+
+#playerItems {
+    display:flex;
 }
 
 .item{

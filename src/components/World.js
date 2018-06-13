@@ -281,8 +281,12 @@ class World extends Component {
       return (
         <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
         <div id="header">
-          <div id="playerHealth">Health: {this.state.player.health}</div>
-          <div id="dayCount"><h4>Day: {this.state.world.dayCount}</h4></div>
+          <div id="dayCount">
+            <h4>Day: {this.state.world.dayCount}</h4>
+          </div>
+          <div id="playerHealth">
+            <h4>Health: </h4><div>{"*".repeat(this.state.player.health)}</div>
+          </div>
         </div>
           <div className="world-rows">
             {this.these_rows}

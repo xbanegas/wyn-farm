@@ -2,26 +2,38 @@
     height:50px;
     width:50px;
     border: 1px black solid;
-}
-
-.tree {
-    background-color: brown;
+    display:flex;
+    flex-direction:column;
+    color: ghostwhite;
 }
 
 .block-content {
     display:flex;
-    flex-direction:column;
-    align-items: center;
+
+    align-items: flex-end;
     justify-content: space-around;
     height:100%;
 }
 
+.player {
+    height:24px;
+    width:24px;
+    text-align:center;
+    background: url(../assets/player.png);
+    align-self:flex-end;
+}
+
+
+.tree {
+    background-color: saddlebrown;
+}
+
 .carrot {
-    background-color: orange;
+    background-color: darkorange;
 }
 
 .creep {
-    background-color: purple;
+    background-color:mediumpurple;
 }
 
 .wall {

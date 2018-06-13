@@ -27,7 +27,9 @@ class Inventory extends Component {
         return(
             <div id="inventory">
                 <h4 id="inventoryTitle">Inventory</h4>
-                {this.renderItemDivs()}
+                <div id="playerItems">
+                    {this.renderItemDivs()}
+                </div>
             </div>
         );
     }
