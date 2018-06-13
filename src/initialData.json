@@ -13,7 +13,12 @@
             "total": 3,
             "carrots": []
         },
-        "wallLocs": []
+        "wallLocs": [],
+        "creeps": {
+            "total": 3,
+            "creeps": [],
+            "locs": []
+        }
     },
     "player": {
       "id": "298323",

@@ -47,6 +47,10 @@ class Block extends Component {
             return (
                 <div className="block_content wall">WALL</div>
             );
+        } else if (props.blockCode[1] === "66") {
+            return (
+                <div className="block_content creep">CREEP!</div>
+            );
         } else {
             return(
                 <div className={`block_content ${props.blockCode[1]}`}>

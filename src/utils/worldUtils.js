@@ -13,6 +13,23 @@ const chngLocID = (worldSize, locID, type, inc) => {
     return newLoc;
 };
 
+const isAdjacent = (worldSize, locA, locB) => {
+    let up = chngLocID(worldSize, locA, "vert", 1);
+    let down = chngLocID(worldSize, locA, "vert", -1);
+    let right = chngLocID(worldSize, locA, "horiz", 1);
+    let left = chngLocID(worldSize, locA, "horiz", -1);
+    if (locB === up || locB === down || locB === right || locB === left){
+        return true;
+    }
+    return false;
+}
+
+const moveRandomAdjacent = (worldSize, locID) => {
+    let choice = Math.floor(Math.random()*4);
+    let directions = [["vert", 1], ["vert", -1], ["horiz", 1], ["horiz", -1]];
+    return chngLocID(worldSize, locID, directions[choice][0], directions[choice][1]);
+}
+
 const containsPlayer = (blockCode) => {
     try{
         if (blockCode[0] === 'x') {return true}
@@ -68,5 +85,25 @@ const genCarrotLocs = (worldSize, total) => {
     return carrots
 }
 
+const genCreepLocs = (worldSize, total) => {
+    let halfSize = (worldSize -1) / 2;
+    let gaussGen = genGauss(halfSize, halfSize/2);
+    let creepLocs = [];
+    for (let i = 0; i < total; i++) {
+        let x = Math.floor(gaussGen());
+        let y = Math.floor(gaussGen());
+        creepLocs.push(`${padNum(x)}${padNum(y)}`)
+    }
+    let creeps = {locs: creepLocs};
+    creepLocs.forEach((creepLoc)=>{
+        creeps[creepLocs] = {location: creepLoc, health: 5};
+    });
+    return creeps
+}
 
-export {chngLocID, containsPlayer, genPlayerInitialLoc, genTreeLocs, genCarrotLocs};
+
+export {
+    chngLocID, containsPlayer, genPlayerInitialLoc, 
+    genTreeLocs, genCarrotLocs, genCreepLocs, isAdjacent,
+    moveRandomAdjacent
+};

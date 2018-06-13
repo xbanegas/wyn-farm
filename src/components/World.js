@@ -3,7 +3,10 @@ import Row from './Row';
 import Inventory from './Inventory';
 import Craft from './Craft';
 import {padNum, makeGrid} from '../utils/dataUtils';
-import {genPlayerInitialLoc, chngLocID, genTreeLocs, genCarrotLocs} from '../utils/worldUtils';
+import { 
+  genPlayerInitialLoc, chngLocID, genTreeLocs, 
+  genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent
+} from '../utils/worldUtils';
 // import logo from '../logo.svg';
 import initialData from '../initialData';
 import '../css/World.css';
@@ -19,7 +22,6 @@ class World extends Component {
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
-    console.log(this.state.player.health);
   }
   componentDidUpdate(){
     // console.log("world update");
@@ -33,6 +35,8 @@ class World extends Component {
     let carrotLocs = this.state.world.carrots.locs;
     let carrots = this.state.world.carrots;
     let wallLocs = this.state.world.wallLocs;
+    let creepLocs = this.state.world.creeps.locs;
+    let creeps = this.state.world.creeps;
     this.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row 
@@ -47,6 +51,8 @@ class World extends Component {
           carrotLocs={carrotLocs}
           carrots={carrots}
           wallLocs={wallLocs}
+          creepLocs={creepLocs}
+          creeps={creeps}
         />
       );
     });
@@ -72,13 +78,20 @@ class World extends Component {
     }
     this.setState({world: world});
     this.setState({player: player});
+    // gen Creeps
+    if (world.dayCount === 3){
+      world = {...this.state.world};
+      if (world.creeps.locs.length === 0) {
+        world.creeps = genCreepLocs(this.state.world.size, this.state.world.creeps.total);
+        this.setState({world});
+      }
+    }
     // Handle Keypresses
     let worldSize = this.state.world.size;
     let currentLoc = player.location;
     let keyPressed = e.key
     let thisItemSelection = this.state.player.itemSelected;
     let newLocID = "";
-    console.log(this.state.world.carrots);
     switch(keyPressed){
       case "w":
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
@@ -216,7 +229,12 @@ class World extends Component {
       default: 
         break;
       }
-      
+    this.state.world.creeps.locs.forEach((treeID)=>{
+      if (isAdjacent(this.worldSize, treeID, this.playerLoc)){
+        player.health--;
+      }
+    });
+    // if (isAdjacent(this.worldSize, this.playerLoc, this.state.world.trees.locs)){}
     this.makeWorldRows(this.playerLoc, player);
   }
 
@@ -248,7 +266,6 @@ class World extends Component {
   }
 
   render() {
-    console.log(this.state.player.health);
     if (this.state.player.health > 0){
       return (
         <div className="world" onKeyPress={this.handleKey} tabIndex="0" >

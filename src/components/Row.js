@@ -35,8 +35,12 @@ class Row extends Component {
                 (this.props.dayCount >= this.props.carrots[blockID].matureDay ) ){ 
                 blockCode[1] = "44";
             }
+            // register wall block
             if (props.wallLocs.includes(blockID)){
                 blockCode[1] = "55";
+            }
+            if (props.creepLocs.includes(blockID)){
+                blockCode[1] = "66";
             }
             this.these_blocks.push(<Block key={blockID} blockCode={blockCode} blockID={blockID}/>);
         }
