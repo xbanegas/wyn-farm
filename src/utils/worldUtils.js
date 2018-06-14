@@ -1,14 +1,15 @@
-import {padNum, locIDToArray, locArrayToLocId, genGauss} from './dataUtils';
+import {padNum, locIDToArray, locArrayToLocId, mod, genGauss} from './dataUtils';
+
 
 const chngLocID = (worldSize, locID, type, inc) => {
     let newLoc;
     let dim;
     if (type === "vert"){dim = 0}
     else if (type === "horiz") {dim = 1}
+    else { console.log("chngLocID: not a valid direction"); return false }
     newLoc = locIDToArray(locID);
-    newLoc[dim] = newLoc[dim] + parseInt(inc);
-    if (newLoc[dim] < 0 ) {newLoc[dim] = padNum(worldSize-1)}
-    else if (newLoc[dim]>worldSize-1) { newLoc[dim] = padNum(0) }
+    newLoc[dim] = newLoc[dim] + parseInt(inc)
+    newLoc[dim] = mod(newLoc[dim],worldSize)
     newLoc = locArrayToLocId(newLoc);
     return newLoc;
 };

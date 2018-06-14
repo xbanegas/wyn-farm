@@ -16,8 +16,8 @@ class Inventory extends Component {
             itemSelectedClass = itemSelected === i ? "selected" : "";
             item_divs.push(
                 <div key={item.name} className={`item ${itemSelectedClass}`}>
-                    <div class="item-name"><h6>{item.name}</h6></div>
-                    <div class="item-count">{item.count}</div>
+                    <div className="item-name"><h6>{item.name}</h6></div>
+                    <div className="item-count">{item.count}</div>
                 </div>
             );
         }

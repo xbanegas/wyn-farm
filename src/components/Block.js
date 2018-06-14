@@ -30,24 +30,24 @@ class Block extends Component {
         // Render Tree
         if (props.blockCode[1] === "33"){
             blockContent.push(
-                <div className="block_content tree">TREE</div>
+                <div key={3} className="block_content tree">TREE</div>
             );
         // Else Render Grass
         } else if (props.blockCode[1] === "44") {
             blockContent.push(
-                <div className="block_content carrot">CARROT</div>
+                <div key={4} className="block_content carrot">CARROT</div>
             );
         } else if (props.blockCode[1] === "55") {
             blockContent.push(
-                <div className="block_content wall">WALL</div>
+                <div key={5} className="block_content wall">WALL</div>
             );
         } else if (props.blockCode[1] === "66") {
             blockContent.push(
-                <div className="block_content creep">CREEP!</div>
+                <div key={6} className="block_content creep">CREEP!</div>
             );
         } else {
             blockContent.push(
-                <div className={`block_content ${props.blockCode[1]}`}>
+                <div key={0} className={`block_content ${props.blockCode[1]}`}>
                     <span></span>
                 </div>
             );
@@ -56,7 +56,7 @@ class Block extends Component {
         if (props.blockCode[0] === "x"){
             blockContent.push(
                 // <div className={`block-content ${props.blockCode[1]}`}>
-                <div className="block-content">
+                <div key="x" className="block-content">
                     {this.player()}
                 </div>
             );

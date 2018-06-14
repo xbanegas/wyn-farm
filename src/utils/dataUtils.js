@@ -23,6 +23,7 @@ const makeGrid = (size) => {
     return grid
 }
 
+const mod = (x, n) => (x % n + n) % n;
 
 const genGauss = (mean, stdev) => {
     var y2;
@@ -55,4 +56,4 @@ const genGauss = (mean, stdev) => {
 }
 
 
-export {padNum, locIDToArray, locArrayToLocId, makeGrid, genGauss}
+export {padNum, locIDToArray, locArrayToLocId, makeGrid, genGauss, mod}
