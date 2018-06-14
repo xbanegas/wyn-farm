@@ -1,5 +1,5 @@
 import {locIDToArray} from "../utils/dataUtils";
-import {genPlayerInitialLoc, chngLocID} from "../utils/worldUtils";
+import {genPlayerInitialLoc, chngLocID, moveRandomAdjacent} from "../utils/worldUtils";
 
 test('a valid player location is generated', ()=>{
     let worldSize = 5
@@ -20,4 +20,6 @@ test('the player moves correctly', ()=>{
     expect(chngLocID(worldSize, playerLoc, "horiz", -1)).toBe("0403");
     playerLoc = "0000";
     expect(chngLocID(worldSize, playerLoc, "horiz", -1)).toBe("0004");
+    expect(chngLocID(worldSize,playerLoc,"vert", -1)).toBe("0400");
 });
+

@@ -58,8 +58,9 @@ const genPlayerInitialLoc = (worldSize) => {
 };
 
 /**
- * TreeLoc generation may be different in future
- * @param {*} worldSize 
+ * TreeLoc 
+ * @param {Number} worldSize 
+ * @param {Number} total - total number of trees to spawn
  */
 const genTreeLocs = (worldSize, total) => {
     let halfSize = (worldSize -1) / 2;
@@ -78,6 +79,11 @@ const genTreeLocs = (worldSize, total) => {
     return trees
 };
 
+/**
+ * genCarrotLocs 
+ * @param {Number} worldSize 
+ * @param {Number} total - total number of carrots to spawn
+ */
 const genCarrotLocs = (worldSize, total) => {
     let halfSize = (worldSize -1) / 2;
     let gaussGen = genGauss(halfSize, halfSize/2);
@@ -94,6 +100,11 @@ const genCarrotLocs = (worldSize, total) => {
     return carrots
 }
 
+/**
+ * genCreepLocs
+ * @param {Number} worldSize 
+ * @param {Number} total - total number of creeps to spawn
+ */
 const genCreepLocs = (worldSize, total) => {
     let halfSize = (worldSize -1) / 2;
     let gaussGen = genGauss(halfSize, halfSize/2);
