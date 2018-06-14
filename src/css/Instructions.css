@@ -4,10 +4,12 @@
     width: 800px;
     background-color: grey;
     text-align: left;
+    left:0;
+    top:20px;
 }
-#instructionToggle{display:flex;}
+
+#instructionToggle{display:flex; position: relative;}
 #instructionToggle button {
     border: none;
     font-family: inherit;
-
 }

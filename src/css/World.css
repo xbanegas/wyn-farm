@@ -12,6 +12,8 @@
     font-size: 13px;
 }
 
+.world #codeLink a{color: gray; text-decoration: none;}
+
 #header{
     display: flex;
     justify-content: space-between;

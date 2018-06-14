@@ -1,5 +1,5 @@
 import {locIDToArray} from "../utils/dataUtils";
-import {genPlayerInitialLoc, chngLocID, moveRandomAdjacent} from "../utils/worldUtils";
+import {genPlayerInitialLoc, chngLocID, moveRandomAdjacent, isAdjacent} from "../utils/worldUtils";
 
 test('a valid player location is generated', ()=>{
     let worldSize = 5
@@ -11,7 +11,7 @@ test('a valid player location is generated', ()=>{
 });
 
 test('the player moves correctly', ()=>{
-    let worldSize = 5
+    let worldSize = 5;
     let playerLoc = "0403";
     expect(chngLocID(worldSize, playerLoc, "vert", 1)).toBe("0003");
     expect(chngLocID(worldSize, playerLoc, "vert", -1)).toBe("0303");
@@ -23,3 +23,9 @@ test('the player moves correctly', ()=>{
     expect(chngLocID(worldSize,playerLoc,"vert", -1)).toBe("0400");
 });
 
+test('identifies adjacent blocks', ()=>{
+    let worldSize = 5;
+    let playerLoc = "0403";
+    let creepLoc = "0303";
+    expect(isAdjacent(worldSize,playerLoc,creepLoc)).toBe(true);
+});

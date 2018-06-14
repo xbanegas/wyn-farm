@@ -97,6 +97,7 @@ class World extends Component {
         this.setState({world});
       }
     }
+
     // Handle Keypresses
     let worldSize = this.state.world.size;
     let currentLoc = player.location;
@@ -242,12 +243,14 @@ class World extends Component {
       default: 
         break;
       }
-    this.state.world.creeps.locs.forEach((treeID)=>{
-      if (isAdjacent(this.worldSize, treeID, this.playerLoc)){
-        player.health--;
-      }
-    });
     // if (isAdjacent(this.worldSize, this.playerLoc, this.state.world.trees.locs)){}
+    this.state.world.creeps.locs.forEach(function(creepLocID){
+      let isNextToCreep = isAdjacent(world.size, creepLocID, player.location);
+      if(isNextToCreep){
+        player.health--;
+        this.setState({player});
+      }
+    }, this);
     this.makeWorldRows(this.playerLoc, player);
   }
 
@@ -314,7 +317,7 @@ class World extends Component {
           </div>
           <Inventory playerItems={this.state.player.inventory} itemSelected={this.state.player.itemSelected} />
           <Craft playerItems={this.state.player.inventory} craft={this.addCraftToInventory} />
-
+          <div id="codeLink"><a href="https://github.com/xbanegas/wyn-farm">code</a></div>
         </div>
       );
     } else if (this.state.player.health === 0) {
