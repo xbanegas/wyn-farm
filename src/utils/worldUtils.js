@@ -25,6 +25,13 @@ const isAdjacent = (worldSize, locA, locB) => {
     return false;
 }
 
+const locIsOnMap = (worldSize, locID) => {
+    let locArray = locIDToArray(locID);
+    let inVert = (0 <=locArray[0] && locArray[0] < worldSize);
+    let inHoriz = (0 <=locArray[1] && locArray[1] < worldSize);
+    return (inVert && inHoriz) ? true : false
+}
+
 const locHasWall = (locID, wallLocs) => {
     return wallLocs.includes(locID) ? true : false
 }
@@ -49,15 +56,20 @@ const containsPlayer = (blockCode) => {
     }
 }
 
-const genGaussCord = (gaussGen) => {
-    let coord = []
-    coord.push(Math.floor(gaussGen()));
-    coord.push(Math.floor(gaussGen()));
+const genGaussCord = (worldSize, gaussGen) => {
+    let coord;
+    let coordOnMap;
+    do {
+        coord = [];
+        coord.push(Math.floor(gaussGen()));
+        coord.push(Math.floor(gaussGen()));
+        coordOnMap = locIsOnMap(worldSize, locArrayToLocId(coord));
+    } while(!coordOnMap)
     return coord;
 }
 
-const genPlayerInitialLoc = (gaussGen) => {
-    let coord = genGaussCord(gaussGen);
+const genPlayerInitialLoc = (worldSize, gaussGen) => {
+    let coord = genGaussCord(worldSize, gaussGen);
     return `${padNum(coord[0])}${padNum(coord[1])}`
 };
 
@@ -66,10 +78,10 @@ const genPlayerInitialLoc = (gaussGen) => {
  * @param {Function} gaussGen
  * @param {Number} total - total number of trees to spawn
  */
-const genTreeLocs = (gaussGen, total) => {
+const genTreeLocs = (worldSize, gaussGen, total) => {
     let treeLocs = []
-    for (let i = 0; i <= total; i++) {
-        let coord = genGaussCord(gaussGen);
+    for (let i = 0; i < total; i++) {
+        let coord = genGaussCord(worldSize, gaussGen);
         treeLocs.push(`${padNum(coord[0])}${padNum(coord[1])}`)
     }
     let trees = {locs: treeLocs}
@@ -84,10 +96,10 @@ const genTreeLocs = (gaussGen, total) => {
  * @param {Function} gaussGen 
  * @param {Number} total - total number of carrots to spawn
  */
-const genCarrotLocs = (gaussGen, total) => {
+const genCarrotLocs = (worldSize, gaussGen, total) => {
     let carrotLocs = [];
     for (let i = 0; i < total; i++) {
-        let coord = genGaussCord(gaussGen);
+        let coord = genGaussCord(worldSize, gaussGen);
         carrotLocs.push(`${padNum(coord[0])}${padNum(coord[1])}`)
     }
     let carrots = {locs: carrotLocs};
@@ -102,10 +114,10 @@ const genCarrotLocs = (gaussGen, total) => {
  * @param {Function} gaussGen 
  * @param {Number} total - total number of creeps to spawn
  */
-const genCreepLocs = (gaussGen, total) => {
+const genCreepLocs = (worldSize, gaussGen, total) => {
     let creepLocs = [];
     for (let i = 0; i < total; i++) {
-        let coord = genGaussCord(gaussGen);
+        let coord = genGaussCord(worldSize, gaussGen);
         creepLocs.push(`${padNum(coord[0])}${padNum(coord[1])}`)
     }
     let creeps = {locs: creepLocs};
@@ -119,5 +131,5 @@ const genCreepLocs = (gaussGen, total) => {
 export {
     chngLocID, containsPlayer, genPlayerInitialLoc, 
     genTreeLocs, genCarrotLocs, genCreepLocs, isAdjacent,
-    locHasWall, moveRandomAdjacent
+    locHasWall, moveRandomAdjacent, locIsOnMap
 };

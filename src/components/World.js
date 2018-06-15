@@ -20,9 +20,9 @@ class World extends Component {
     this.state = initialData;
     let worldSize = this.state.world.size - 1;
     this.gaussGen = gaussGen(worldSize/2, worldSize/4);
-    this.state.player.location = genPlayerInitialLoc(this.gaussGen);
-    this.state.world.trees = genTreeLocs(this.gaussGen, this.state.world.trees.total);
-    this.state.world.carrots = genCarrotLocs(this.gaussGen, this.state.world.carrots.total);
+    this.state.player.location = genPlayerInitialLoc(worldSize, this.gaussGen);
+    this.state.world.trees = genTreeLocs(worldSize, this.gaussGen, this.state.world.trees.total);
+    this.state.world.carrots = genCarrotLocs(worldSize, this.gaussGen, this.state.world.carrots.total);
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
