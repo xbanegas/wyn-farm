@@ -1,4 +1,4 @@
-import {padNum, locIDToArray, locArrayToLocId, mod, genGauss} from './dataUtils';
+import {padNum, locIDToArray, locArrayToLocId, mod} from './dataUtils';
 
 
 const chngLocID = (worldSize, locID, type, inc) => {
@@ -49,30 +49,30 @@ const containsPlayer = (blockCode) => {
     }
 }
 
-const genPlayerInitialLoc = (worldSize) => {
-    let halfSize = (worldSize-1) / 2;
-    let gaussGen = genGauss(halfSize, halfSize/2);
-    let x = Math.floor(gaussGen());
-    let y = Math.floor(gaussGen());
-    return `${padNum(x)}${padNum(y)}`
+const genGaussCord = (gaussGen) => {
+    let coord = []
+    coord.push(Math.floor(gaussGen()));
+    coord.push(Math.floor(gaussGen()));
+    return coord;
+}
+
+const genPlayerInitialLoc = (gaussGen) => {
+    let coord = genGaussCord(gaussGen);
+    return `${padNum(coord[0])}${padNum(coord[1])}`
 };
 
 /**
- * TreeLoc 
- * @param {Number} worldSize 
+ * genTreeLocs
+ * @param {Function} gaussGen
  * @param {Number} total - total number of trees to spawn
  */
-const genTreeLocs = (worldSize, total) => {
-    let halfSize = (worldSize -1) / 2;
-    let gaussGen = genGauss(halfSize, halfSize/2);
+const genTreeLocs = (gaussGen, total) => {
     let treeLocs = []
     for (let i = 0; i <= total; i++) {
-        let x = Math.floor(gaussGen());
-        let y = Math.floor(gaussGen());
-        treeLocs.push(`${padNum(x)}${padNum(y)}`)
+        let coord = genGaussCord(gaussGen);
+        treeLocs.push(`${padNum(coord[0])}${padNum(coord[1])}`)
     }
     let trees = {locs: treeLocs}
-    // eventually set inital supply in json
     treeLocs.forEach((treeLoc)=>{
         trees[treeLoc] = {location: treeLoc, supply: 10};
     });
@@ -81,17 +81,14 @@ const genTreeLocs = (worldSize, total) => {
 
 /**
  * genCarrotLocs 
- * @param {Number} worldSize 
+ * @param {Function} gaussGen 
  * @param {Number} total - total number of carrots to spawn
  */
-const genCarrotLocs = (worldSize, total) => {
-    let halfSize = (worldSize -1) / 2;
-    let gaussGen = genGauss(halfSize, halfSize/2);
+const genCarrotLocs = (gaussGen, total) => {
     let carrotLocs = [];
     for (let i = 0; i < total; i++) {
-        let x = Math.floor(gaussGen());
-        let y = Math.floor(gaussGen());
-        carrotLocs.push(`${padNum(x)}${padNum(y)}`)
+        let coord = genGaussCord(gaussGen);
+        carrotLocs.push(`${padNum(coord[0])}${padNum(coord[1])}`)
     }
     let carrots = {locs: carrotLocs};
     carrotLocs.forEach((carrotLoc)=>{
@@ -102,17 +99,14 @@ const genCarrotLocs = (worldSize, total) => {
 
 /**
  * genCreepLocs
- * @param {Number} worldSize 
+ * @param {Function} gaussGen 
  * @param {Number} total - total number of creeps to spawn
  */
-const genCreepLocs = (worldSize, total) => {
-    let halfSize = (worldSize -1) / 2;
-    let gaussGen = genGauss(halfSize, halfSize/2);
+const genCreepLocs = (gaussGen, total) => {
     let creepLocs = [];
     for (let i = 0; i < total; i++) {
-        let x = Math.floor(gaussGen());
-        let y = Math.floor(gaussGen());
-        creepLocs.push(`${padNum(x)}${padNum(y)}`)
+        let coord = genGaussCord(gaussGen);
+        creepLocs.push(`${padNum(coord[0])}${padNum(coord[1])}`)
     }
     let creeps = {locs: creepLocs};
     creepLocs.forEach((creepLoc)=>{
@@ -125,5 +119,5 @@ const genCreepLocs = (worldSize, total) => {
 export {
     chngLocID, containsPlayer, genPlayerInitialLoc, 
     genTreeLocs, genCarrotLocs, genCreepLocs, isAdjacent,
-    moveRandomAdjacent
+    locHasWall, moveRandomAdjacent
 };

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Row from './Row';
 import Inventory from './Inventory';
 import Craft from './Craft';
-import {padNum, makeGrid} from '../utils/dataUtils';
+import {padNum, makeGrid, gaussGen} from '../utils/dataUtils';
 import { 
   genPlayerInitialLoc, chngLocID, genTreeLocs, 
-  genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent
+  genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent,
+  locHasWall
 } from '../utils/worldUtils';
 // import logo from '../logo.svg';
 import Instructions from './Instructions';
@@ -17,9 +18,11 @@ class World extends Component {
   constructor(props){
     super(props);
     this.state = initialData;
-    this.state.player.location = genPlayerInitialLoc(this.state.world.size);
-    this.state.world.trees = genTreeLocs(this.state.world.size, this.state.world.trees.total);
-    this.state.world.carrots = genCarrotLocs(this.state.world.size, this.state.world.carrots.total);
+    let worldSize = this.state.world.size - 1;
+    this.gaussGen = gaussGen(worldSize/2, worldSize/4);
+    this.state.player.location = genPlayerInitialLoc(this.gaussGen);
+    this.state.world.trees = genTreeLocs(this.gaussGen, this.state.world.trees.total);
+    this.state.world.carrots = genCarrotLocs(this.gaussGen, this.state.world.carrots.total);
     this.makeWorldRows(this.state.player.location, this.state.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
@@ -93,7 +96,7 @@ class World extends Component {
     if (world.dayCount === 3){
       world = {...this.state.world};
       if (world.creeps.locs.length === 0) {
-        world.creeps = genCreepLocs(this.state.world.size, this.state.world.creeps.total);
+        world.creeps = genCreepLocs(this.gaussGen, this.state.world.creeps.total);
         this.setState({world});
       }
     }
@@ -104,33 +107,26 @@ class World extends Component {
     let keyPressed = e.key
     let thisItemSelection = this.state.player.itemSelected;
     let newLocID = "";
+    let wallLocs = this.state.world.wallLocs;
     switch(keyPressed){
       case "w":
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
-        if(!this.state.world.wallLocs.includes(newLocID)){
-          player.location = newLocID
-        }
+        if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.playerLoc = player.location;
         break;
       case "a":
         newLocID =  chngLocID(worldSize, currentLoc, "horiz", -1);
-        if(!this.state.world.wallLocs.includes(newLocID)){
-          player.location = newLocID
-        }
+        if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.playerLoc = player.location;
         break;
       case "s":
         newLocID = chngLocID(worldSize, currentLoc, "vert", 1);
-        if(!this.state.world.wallLocs.includes(newLocID)){
-          player.location = newLocID
-        }
+        if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.playerLoc = player.location;
         break;
       case "d":
         newLocID = chngLocID(worldSize, currentLoc, "horiz", 1);
-        if(!this.state.world.wallLocs.includes(newLocID)){
-          player.location = newLocID
-        }
+        if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.playerLoc = player.location;
         break;
       case "f":
@@ -144,10 +140,12 @@ class World extends Component {
           player.inventory.forEach((item)=>{
             if (item.name === "wood") { item.count++; }
           });
-          this.state.world.trees[currentLoc].supply--;
-          if (this.state.world.trees[currentLoc].supply === 0){
-            delete this.state.world.trees[currentLoc];
+          if(world.trees[currentLoc]){ world.trees[currentLoc].supply-- };
+          this.setState({world});
+          if (this.state.world.trees[currentLoc] && this.state.world.trees[currentLoc].supply === 0){
+            delete world.trees[currentLoc];
             treeLocs.splice(treeLocs.indexOf(currentLoc),1);
+            this.setState({world});
           }
         }
         // handle carrot farming
@@ -158,10 +156,12 @@ class World extends Component {
             if (item.name === "carrot") { item.count++; playerHasCarrots = true;}
           });
           if (!playerHasCarrots) { player.inventory.push({name: "carrot", count: 1}) }
-          this.state.world.carrots[currentLoc].supply--;
-          if (this.state.world.carrots[currentLoc].supply === 0){
-            delete this.state.world.carrots[currentLoc];
+          if(world.carrots[currentLoc]){world.carrots[currentLoc].supply--;}
+          this.setState({world});
+          if (this.state.world.carrots[currentLoc] && this.state.world.carrots[currentLoc].supply === 0){
+            delete world.carrots[currentLoc];
             carrotLocs.splice(treeLocs.indexOf(currentLoc),1);
+            this.setState({world});
           }
         }
         break;
