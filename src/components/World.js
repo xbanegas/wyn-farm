@@ -13,7 +13,7 @@ import Instructions from './Instructions';
 import initialData from '../initialData';
 import '../css/World.css';
 import {connect} from 'react-redux';
-import {setWorld} from '../actions/setWorldActions';
+import {setWorld, movePlayer} from '../actions/setWorldActions';
 import { SET_WORLD } from '../actions/types';
 
 class World extends Component {
@@ -122,6 +122,7 @@ class World extends Component {
       case "w":
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
+        this.props.movePlayer(newLocID);
         this.playerLoc = player.location;
         break;
       case "a":
@@ -344,4 +345,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, {setWorld})(World);
+export default connect(mapStateToProps, {setWorld, movePlayer})(World);

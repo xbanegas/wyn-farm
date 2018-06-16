@@ -3,6 +3,7 @@ const padNum = (num)=> {
 };
 
 const locIDToArray = (locID) => {
+    console.log(locID);
     return [Number(locID.slice(0,2)),Number(locID.slice(2))]
 };
 
