@@ -1,4 +1,4 @@
-import {locIDToArray, gaussGen} from "../utils/dataUtils";
+import {gaussGen} from "../utils/dataUtils";
 import {genPlayerInitialLoc, chngLocID, locHasWall, locIsOnMap, moveRandomAdjacent, 
     isAdjacent, genTreeLocs, genCarrotLocs, genCreepLocs} from "../utils/worldUtils";
 
@@ -64,13 +64,36 @@ test('changes locID to a random adjacent locID avoiding walls', ()=>{
 
 test('generates random treeLocs', ()=>{
     let trees = genTreeLocs(worldSize, gaussFunct, 10);
-    expect(trees.locs.length).toBe(10)
+    expect(trees.locs.length).toBe(10);
+    trees = Object.entries(trees).filter((item)=> {return item[0] != 'locs'});
+    trees.forEach((tree)=>{
+        tree = tree[1];
+        let onMap = locIsOnMap(worldSize, tree.location);
+        expect(onMap).toBe(true);
+        expect(tree.supply).toBe(10);
+    });
 });
 
 test('generates random carrotLocs', ()=>{
-    
+    let carrots = genCarrotLocs(worldSize, gaussFunct, 3);
+    expect(carrots.locs.length).toBe(3);
+    carrots = Object.entries(carrots).filter((item)=>{return item[0] != 'locs'});
+    carrots.forEach((carrot)=>{
+        carrot = carrot[1];
+        let onMap = locIsOnMap(worldSize, carrot.location);
+        expect(onMap).toBe(true);
+        expect(carrot.supply).toBe(3);
+    });
 });
 
 test('generates random creepLocs', ()=>{
-    
+    let creeps = genCreepLocs(worldSize, gaussFunct, 3);
+    expect(creeps.locs.length).toBe(3);
+    creeps = Object.entries(creeps).filter((item)=>{return item[0] != 'locs'});
+    creeps.forEach((creep)=>{
+        creep = creep[1];
+        let onMap = locIsOnMap(worldSize, creep.location);
+        expect(onMap).toBe(true);
+        expect(creep.health).toBe(5);
+    });
 });
