@@ -128,6 +128,10 @@ const genCreepLocs = (worldSize, gaussGen, total) => {
 }
 
 
+
+
+
+
 export {
     chngLocID, containsPlayer, genPlayerInitialLoc, 
     genTreeLocs, genCarrotLocs, genCreepLocs, isAdjacent,

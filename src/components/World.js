@@ -8,7 +8,7 @@ import {
   genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent,
   locHasWall
 } from '../utils/worldUtils';
-import {clockTick} from '../utils/handleKeyUtils';
+import {clockTick, genNewCreepLocs} from '../utils/handleKeyUtils';
 // import logo from '../logo.svg';
 import Instructions from './Instructions';
 import initialData from '../initialData';
@@ -75,18 +75,17 @@ class World extends Component {
     this.setState({world: world});
     this.setState({player: player});
 
-    // creeps from move day after spawn
-    if (world.dayCount > 3) {
-      world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
-        return moveRandomAdjacent(this.state.world.size, creepLoc, this.state.world.wallLocs);
-      });
+    // Creeps Move after Spawn Day
+    if (world.dayCount > world.creepSpawnDay) {
+      world.creeps.locs = genNewCreepLocs(this.state.world);
       this.setState({world: world});
     }
-    // gen Creeps
-    if (world.dayCount === 3){
+
+    // Generate Creeps on Spawn Day
+    if (world.dayCount === world.creepSpawnDay){
       world = {...this.state.world};
       if (world.creeps.locs.length === 0) {
-        world.creeps = genCreepLocs(this.gaussGen, this.state.world.creeps.total);
+        world.creeps = genCreepLocs(this.state.world.size, this.gaussGen, this.state.world.creeps.total);
         this.setState({world});
       }
     }
