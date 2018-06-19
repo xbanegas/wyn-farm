@@ -7,7 +7,7 @@
         "dayInterval": 24,
         "moveCount": 0,
         "healthDecayRate": 10, 
-        "creepSpawnDay": 1,
+        "creepSpawnDay": 3,
         "grid":[],
         "trees":{
             "total": 10,

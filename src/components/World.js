@@ -13,6 +13,7 @@ import {clockTick, genNewCreepLocs} from '../utils/handleKeyUtils';
 import Instructions from './Instructions';
 import initialData from '../initialData';
 import '../css/World.css';
+import { addItemToPlayer } from '../utils/craftUtils';
 
 
 class World extends Component {
@@ -244,29 +245,8 @@ class World extends Component {
   }
 
   addCraftToInventory(item){
-    // console.log(this.state);
     let player = {...this.state.player};
-    let foundItem = false;
-    player.inventory.forEach((playerItem)=>{
-      if (playerItem.name === item.name){
-        playerItem.count++;
-        foundItem = true;
-        player.inventory.forEach((subItem)=>{
-          if (subItem.name === item.remove.name) {
-            subItem.count -= item.remove.count;
-          }
-        });
-      }
-    });
-    if (!foundItem) {
-      let newItem = {name: item.name, count: 1};
-      player.inventory.push(newItem);
-      player.inventory.forEach((subItem)=>{
-        if (subItem.name === item.remove.name) {
-          subItem.count -= item.remove.count;
-        }
-      });
-    }
+    player = addItemToPlayer(player, item);
     this.setState({player});
   }
 
