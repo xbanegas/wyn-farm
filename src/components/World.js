@@ -8,6 +8,7 @@ import {
   genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent,
   locHasWall
 } from '../utils/worldUtils';
+import {clockTick} from '../utils/handleKeyUtils';
 // import logo from '../logo.svg';
 import Instructions from './Instructions';
 import initialData from '../initialData';
@@ -63,35 +64,24 @@ class World extends Component {
     });
     this.setState({player: player});
   }
+
   selectItem(keyPressed){ return keyPressed -1; }
+
   handleKey(e){
     e.preventDefault();
-    // Move Time Forward
-    /**
-     * @todo move clock to worldutils
-     */
-    let world = {...this.state.world};
-    let player = {...this.state.player};
-    world.moveCount++;
-    let moveCount = world.moveCount;
-    if (!(moveCount < world.dayInterval)){ 
-      world.moveCount = 0;
-      world.dayCount++;
-    }
-    if (moveCount%10===0) {
-      player.health--;
-    }
+
+    // Clock Tick
+    let {world, player} = clockTick(this.state.world, this.state.player);
+    this.setState({world: world});
+    this.setState({player: player});
+
     // creeps from move day after spawn
     if (world.dayCount > 3) {
       world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
         return moveRandomAdjacent(this.state.world.size, creepLoc, this.state.world.wallLocs);
       });
-      /**
-       * @todo creeps cant move through walls 
-       */
+      this.setState({world: world});
     }
-    this.setState({world: world});
-    this.setState({player: player});
     // gen Creeps
     if (world.dayCount === 3){
       world = {...this.state.world};
