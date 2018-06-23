@@ -128,16 +128,19 @@ class World extends Component {
       case "a":
         newLocID =  chngLocID(worldSize, currentLoc, "horiz", -1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
+        this.props.movePlayer(newLocID);
         this.playerLoc = player.location;
         break;
       case "s":
         newLocID = chngLocID(worldSize, currentLoc, "vert", 1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
+        this.props.movePlayer(newLocID);
         this.playerLoc = player.location;
         break;
       case "d":
         newLocID = chngLocID(worldSize, currentLoc, "horiz", 1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
+        this.props.movePlayer(newLocID);
         this.playerLoc = player.location;
         break;
       case "f":
