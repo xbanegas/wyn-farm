@@ -99,8 +99,9 @@ class World extends Component {
        * @todo creeps cant move through walls 
        */
     }
-    this.setState({world: world});
-    this.setState({player: player});
+    // this.setState({world: world});
+		// this.setState({player: player});
+		this.props.setWorld({world, player});
     // gen Creeps
     if (world.dayCount === 3){
       world = {...this.props.world};
@@ -348,7 +349,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
 	return {
-		setWorld: () => dispatch(setWorld()),
+		setWorld: (data) => dispatch(setWorld(data)),
 		movePlayer: bindActionCreators(movePlayer, dispatch)
 	}
 }

@@ -3,7 +3,7 @@ import initialData from '../initialData';
 
 
 export default function(state =initialData, action) {
-    console.log(action.payload);
+    console.log(action);
     switch(action.type){
         case SET_WORLD:
             console.log('setting world');
