@@ -15,6 +15,7 @@ import '../css/World.css';
 import {connect} from 'react-redux';
 import {setWorld, movePlayer} from '../actions/setWorldActions';
 import { SET_WORLD } from '../actions/types';
+import { bindActionCreators } from '../../../../Library/Caches/typescript/2.9/node_modules/redux';
 
 class World extends Component {
   constructor(props){
@@ -27,10 +28,10 @@ class World extends Component {
     this.makeWorldRows(this.props.player.location, this.props.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
+    this.props.setWorld(initialData);
   }
 
   componentWillMount(){
-    this.props.setWorld(initialData, SET_WORLD);
     console.log(this.props);
   }
 
@@ -38,9 +39,7 @@ class World extends Component {
     // console.log("world update");
     // this.props.setWorld();
   }
-  componentDidMount(){
-    // console.log(this.props);
-  }
+
 
   makeWorldRows(playerLoc, player){
     this.grid = makeGrid(this.props.world.size);
@@ -119,10 +118,10 @@ class World extends Component {
     let newLocID = "";
     let wallLocs = this.props.world.wallLocs;
     switch(keyPressed){
-      case "w":
+			case "w":
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
-        if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
-        this.props.movePlayer(newLocID);
+				if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
+        // this.props.movePlayer(newLocID);
         this.playerLoc = player.location;
         break;
       case "a":
@@ -347,5 +346,11 @@ const mapStateToProps = state => ({
     player: state.worldData.player
 });
 
+const mapDispatchToProps = dispatch => {
+	return {
+		setWorld: () => dispatch(setWorld()),
+		movePlayer: bindActionCreators(movePlayer, dispatch)
+	}
+}
 
-export default connect(mapStateToProps, {setWorld, movePlayer})(World);
+export default connect(mapStateToProps, mapDispatchToProps)(World);
