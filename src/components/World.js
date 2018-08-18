@@ -122,7 +122,7 @@ class World extends Component {
 			case "w":
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
 				if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
-        // this.props.movePlayer(newLocID);
+        this.props.movePlayer(newLocID);
         this.playerLoc = player.location;
         break;
       case "a":

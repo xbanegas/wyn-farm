@@ -4,6 +4,6 @@ import movePlayerReducer from './movePlayerReducer';
 
 
 export default combineReducers({
-    worldData: setWorldReducer
-    // worldData: movePlayerReducer
+    worldData: setWorldReducer,
+    player: movePlayerReducer
 });
