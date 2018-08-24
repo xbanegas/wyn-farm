@@ -15,7 +15,7 @@ import '../css/World.css';
 import {connect} from 'react-redux';
 import {setWorld, movePlayer} from '../actions/setWorldActions';
 import { SET_WORLD } from '../actions/types';
-import { bindActionCreators } from '../../../../Library/Caches/typescript/2.9/node_modules/redux';
+import { bindActionCreators } from 'redux';
 
 class World extends Component {
   constructor(props){
