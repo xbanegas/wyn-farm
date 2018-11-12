@@ -10,57 +10,40 @@ import {
 } from '../utils/worldUtils';
 // import logo from '../logo.svg';
 import Instructions from './Instructions';
-import initialData from '../initialData';
 import '../css/World.css';
 import {connect} from 'react-redux';
-import {setWorld, movePlayer} from '../actions/setWorldActions';
-import { SET_WORLD } from '../actions/types';
+import {initWorld, populateWorld, setWorld} from '../actions/worldActions';
+import {initPlayer, movePlayer, setPlayer} from '../actions/playerActions';
 import { bindActionCreators } from 'redux';
 
 class World extends Component {
   constructor(props){
     super(props);
+    this.props.initWorld()
     let worldSize = this.props.world.size - 1;
     this.gaussGen = gaussGen(worldSize/2, worldSize/4);
-    this.props.player.location = genPlayerInitialLoc(this.props.world.size, this.gaussGen);
-    this.props.world.trees = genTreeLocs(this.props.world.size, this.gaussGen, this.props.world.trees.total);
-    this.props.world.carrots = genCarrotLocs(worldSize, this.gaussGen, this.props.world.carrots.total);
+    let playerLoc = genPlayerInitialLoc(this.props.world.size, this.gaussGen);
+    this.props.initPlayer(playerLoc)
+    let trees = genTreeLocs(this.props.world.size, this.gaussGen, this.props.world.trees.total);
+    let carrots = genCarrotLocs(worldSize, this.gaussGen, this.props.world.carrots.total);
+    this.props.populateWorld(trees, carrots)
     this.makeWorldRows(this.props.player.location, this.props.player);
     this.handleKey = this.handleKey.bind(this);
     this.addCraftToInventory = this.addCraftToInventory.bind(this);
-    this.props.setWorld(initialData);
   }
 
-  makeWorldRows(playerLoc, player){
+  makeWorldRows(){
     this.grid = makeGrid(this.props.world.size);
     this.these_rows = [];
-    let treeLocs = this.props.world.trees.locs;
-    let trees = this.props.world.trees;
-    let carrotLocs = this.props.world.carrots.locs;
-    let carrots = this.props.world.carrots;
-    let wallLocs = this.props.world.wallLocs;
-    let creepLocs = this.props.world.creeps.locs;
-    let creeps = this.props.world.creeps;
     this.grid.forEach((row, i)=>{
       this.these_rows.push(
         <Row
           key={i}
           styleName={`row row-${i}`}
-          worldSize={this.props.world.size}
-          dayCount={this.props.world.dayCount}
-          playerLoc={playerLoc}
-          treeLocs={treeLocs}
-          trees={trees}
           rowNum={padNum(i)}
-          carrotLocs={carrotLocs}
-          carrots={carrots}
-          wallLocs={wallLocs}
-          creepLocs={creepLocs}
-          creeps={creeps}
         />
       );
     });
-    this.setState({player: player});
   }
   selectItem(keyPressed){ return keyPressed -1; }
   handleKey(e){
@@ -89,9 +72,8 @@ class World extends Component {
        * @todo creeps cant move through walls
        */
     }
-    // this.setState({world: world});
-		// this.setState({player: player});
-		this.props.setWorld({world, player});
+    // this.props.setWorld({...world});
+    // this.props.setPlayer({...player})
     // gen Creeps
     // console.log(this.props.world)
     world = {...this.props.world}
@@ -101,7 +83,7 @@ class World extends Component {
         world.creeps = genCreepLocs(this.props.world.size, this.gaussGen, this.props.world.creeps.total);
         console.log('======', world.creeps)
         // this.props.world.creeps = world.creeps
-        this.props.setWorld({world, player: this.props.player});
+        this.props.setWorld({world});
       }
     }
 
@@ -117,25 +99,22 @@ class World extends Component {
         newLocID = chngLocID(worldSize, currentLoc, "vert", -1);
 				if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.props.movePlayer(newLocID);
-        this.playerLoc = player.location;
+        this.forceUpdate()
         break;
       case "a":
         newLocID =  chngLocID(worldSize, currentLoc, "horiz", -1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.props.movePlayer(newLocID);
-        this.playerLoc = player.location;
         break;
       case "s":
         newLocID = chngLocID(worldSize, currentLoc, "vert", 1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.props.movePlayer(newLocID);
-        this.playerLoc = player.location;
         break;
       case "d":
         newLocID = chngLocID(worldSize, currentLoc, "horiz", 1);
         if(!locHasWall(newLocID, wallLocs)){ player.location = newLocID }
         this.props.movePlayer(newLocID);
-        this.playerLoc = player.location;
         break;
       case "f":
         console.log('farm');
@@ -248,6 +227,7 @@ class World extends Component {
             this.setState({player});
           }
         }
+        break;
       default:
         break;
       }
@@ -259,7 +239,7 @@ class World extends Component {
         this.setState({player});
       }
     }, this);
-    this.makeWorldRows(this.playerLoc, player);
+
   }
 
   addCraftToInventory(item){
@@ -300,7 +280,7 @@ class World extends Component {
     return(
       <div id="instructionToggle">
         <div id="toggleButton"><button href="#" onClick={this.instructionsModal}>Instructions</button></div>
-        <div style={this.props.world.instructionStyle[this.props.world.instructions % 2]}>
+        <div style={this.props.world.instructionsStyle[this.props.world.instructions % 2]}>
           <Instructions />
         </div>
       </div>
@@ -308,6 +288,7 @@ class World extends Component {
   };
 
   render() {
+    console.log(this.props)
     if (this.props.player.health > 0){
       return (
         <div className="world" onKeyPress={this.handleKey} tabIndex="0" >
@@ -337,13 +318,17 @@ class World extends Component {
 }
 
 const mapStateToProps = state => ({
-    world: state.worldData.world,
-    player: state.worldData.player
+    world: state.world,
+    player: state.player
 });
 
 const mapDispatchToProps = dispatch => {
 	return {
-		setWorld: (data) => dispatch(setWorld(data)),
+    initWorld: (data) => dispatch(initWorld(data)),
+    initPlayer: (data) => dispatch(initPlayer(data)),
+    setWorld: (world) => dispatch(setWorld(world)),
+    setPlayer: (player) => dispatch(setPlayer(player)),
+    populateWorld: (trees, carrots) => dispatch(populateWorld(trees, carrots)),
 		movePlayer: bindActionCreators(movePlayer, dispatch)
 	}
 }

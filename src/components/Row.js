@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import {padNum} from '../utils/dataUtils';
 import Block from './Block';
 import '../css/Row.css';
@@ -7,44 +8,17 @@ class Row extends Component {
     constructor(props){
         super(props);
         this.makeRows(props);
+    }
 
-    }
-    componentDidUpdate(){
-        // console.log("rowupdate");
-    }
-    componentWillReceiveProps(newProps){
-        this.makeRows(newProps);
-    }
-    makeRows(props){
-        let size = props.worldSize;
+    makeRows(){
+        let size = this.props.world.size;
         this.these_blocks = []
         for (let i = 0; i< size; i++){
             let blockID = `${this.props.rowNum}${padNum(i)}`;
-            // default to grass block
-            let blockCode = ["z","00"];
-            // register player block
-            if(blockID === props.playerLoc) {blockCode[0] = "x"}
-            // register tree block
-            if(props.treeLocs.includes(blockID)){
-                blockCode[1] = "33";
-            }
-            // register carrot block
-            if(
-                // (props.carrotLocs.includes(blockID)) && 
-                (this.props.carrots[blockID]) && 
-                (this.props.dayCount >= this.props.carrots[blockID].matureDay ) ){ 
-                blockCode[1] = "44";
-            }
-            // register wall block
-            if (props.wallLocs.includes(blockID)){
-                blockCode[1] = "55";
-            }
-            if (props.creepLocs.includes(blockID)){
-                blockCode[1] = "66";
-            }
-            this.these_blocks.push(<Block key={blockID} blockCode={blockCode} blockID={blockID}/>);
+            this.these_blocks.push(<Block key={blockID} blockID={blockID}/>);
         }
     }
+
     render(){
         return(
             <div className={this.props.styleName}>
@@ -54,4 +28,10 @@ class Row extends Component {
     }
 }
 
-export default Row;
+
+const mapStateToProps = state => ({
+    world: state.world,
+    player: state.player
+});
+
+export default connect(mapStateToProps)(Row)
