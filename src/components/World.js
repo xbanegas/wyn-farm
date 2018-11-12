@@ -13,7 +13,8 @@ import Instructions from './Instructions';
 import '../css/World.css';
 import {connect} from 'react-redux';
 import {initWorld, populateWorld, setWorld} from '../actions/worldActions';
-import {initPlayer, movePlayer, setPlayer} from '../actions/playerActions';
+import {initPlayer, movePlayer, setHealth, setPlayer} from '../actions/playerActions';
+import {tickWorld} from '../actions/thunkActions';
 import { bindActionCreators } from 'redux';
 
 class World extends Component {
@@ -48,22 +49,13 @@ class World extends Component {
   selectItem(keyPressed){ return keyPressed -1; }
   handleKey(e){
     e.preventDefault();
-    // Move Time Forward
-    /**
-     * @todo move clock to worldutils
-     */
+
+    this.props.tickWorld()
+
     let world = {...this.props.world};
     let player = {...this.props.player};
-    world.moveCount++;
-    let moveCount = world.moveCount;
-    if (!(moveCount < world.dayInterval)){
-      world.moveCount = 0;
-      world.dayCount++;
-    }
-    if (moveCount%10===0) {
-      player.health--;
-    }
     // creeps from move day after spawn
+
     if (world.dayCount > 3) {
       world.creeps.locs = world.creeps.locs.map((creepLoc)=>{
         return moveRandomAdjacent(this.props.world.size, creepLoc, this.props.world.wallLocs);
@@ -83,7 +75,7 @@ class World extends Component {
         world.creeps = genCreepLocs(this.props.world.size, this.gaussGen, this.props.world.creeps.total);
         console.log('======', world.creeps)
         // this.props.world.creeps = world.creeps
-        this.props.setWorld({world});
+        this.props.setWorld({...world});
       }
     }
 
@@ -277,6 +269,7 @@ class World extends Component {
   }
 
   addInstructionsModal(){
+    console.log(this.props)
     return(
       <div id="instructionToggle">
         <div id="toggleButton"><button href="#" onClick={this.instructionsModal}>Instructions</button></div>
@@ -295,7 +288,8 @@ class World extends Component {
           {this.addInstructionsModal()}
           <div id="header">
             <div id="dayCount">
-              <h4>Day: {this.props.world.dayCount}</h4>
+              <h4>MC: {this.props.world.moveCount} - Day: {this.props.world.dayCount}</h4>
+              {/* <h4>Day: {this.props.world.dayCount}</h4> */}
             </div>
             <div id="playerHealth">
               <h4>Health: </h4><div>{"*".repeat(this.props.player.health)}</div>
@@ -327,7 +321,9 @@ const mapDispatchToProps = dispatch => {
     initWorld: (data) => dispatch(initWorld(data)),
     initPlayer: (data) => dispatch(initPlayer(data)),
     setWorld: (world) => dispatch(setWorld(world)),
+    setHealth: (delta_health) => dispatch(setHealth(delta_health)),
     setPlayer: (player) => dispatch(setPlayer(player)),
+    tickWorld: () => dispatch(tickWorld()),
     populateWorld: (trees, carrots) => dispatch(populateWorld(trees, carrots)),
 		movePlayer: bindActionCreators(movePlayer, dispatch)
 	}

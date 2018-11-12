@@ -1,4 +1,4 @@
-import { INIT_PLAYER, MOVE_PLAYER, SET_PLAYER } from '../actions/types';
+import { INIT_PLAYER, MOVE_PLAYER, SET_HEALTH, SET_PLAYER } from '../actions/types';
 import Player from '../models/Player'
 
 export default function(player = new Player(), action) {
@@ -12,6 +12,12 @@ export default function(player = new Player(), action) {
 			return {
 				...player,
 				location: action.payload
+			}
+		case SET_HEALTH:
+			let current_health = player.health
+			return {
+				...player,
+				health: current_health + action.payload
 			}
 		case SET_PLAYER:
 			return action.payload
