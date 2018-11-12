@@ -92,8 +92,8 @@ const genTreeLocs = (worldSize, gaussGen, total) => {
 };
 
 /**
- * genCarrotLocs 
- * @param {Function} gaussGen 
+ * genCarrotLocs
+ * @param {Function} gaussGen
  * @param {Number} total - total number of carrots to spawn
  */
 const genCarrotLocs = (worldSize, gaussGen, total) => {
@@ -111,7 +111,7 @@ const genCarrotLocs = (worldSize, gaussGen, total) => {
 
 /**
  * genCreepLocs
- * @param {Function} gaussGen 
+ * @param {Function} gaussGen
  * @param {Number} total - total number of creeps to spawn
  */
 const genCreepLocs = (worldSize, gaussGen, total) => {
@@ -129,7 +129,7 @@ const genCreepLocs = (worldSize, gaussGen, total) => {
 
 
 export {
-    chngLocID, containsPlayer, genPlayerInitialLoc, 
+    chngLocID, containsPlayer, genPlayerInitialLoc,
     genTreeLocs, genCarrotLocs, genCreepLocs, isAdjacent,
     locHasWall, moveRandomAdjacent, locIsOnMap
 };

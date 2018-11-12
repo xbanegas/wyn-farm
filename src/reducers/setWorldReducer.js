@@ -14,7 +14,7 @@ export default function(state =initialData, action) {
             };
             console.log(worldData);
             return worldData;
-        default: 
+        default:
             console.log('defaulting...')
             return state;
     }

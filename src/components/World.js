@@ -3,8 +3,8 @@ import Row from './Row';
 import Inventory from './Inventory';
 import Craft from './Craft';
 import {padNum, makeGrid, gaussGen} from '../utils/dataUtils';
-import { 
-  genPlayerInitialLoc, chngLocID, genTreeLocs, 
+import {
+  genPlayerInitialLoc, chngLocID, genTreeLocs,
   genCarrotLocs, genCreepLocs, isAdjacent, moveRandomAdjacent,
   locHasWall
 } from '../utils/worldUtils';
@@ -31,16 +31,6 @@ class World extends Component {
     this.props.setWorld(initialData);
   }
 
-  componentWillMount(){
-    console.log(this.props);
-  }
-
-  componentDidUpdate(){
-    // console.log("world update");
-    // this.props.setWorld();
-  }
-
-
   makeWorldRows(playerLoc, player){
     this.grid = makeGrid(this.props.world.size);
     this.these_rows = [];
@@ -53,12 +43,12 @@ class World extends Component {
     let creeps = this.props.world.creeps;
     this.grid.forEach((row, i)=>{
       this.these_rows.push(
-        <Row 
-          key={i} 
-          styleName={`row row-${i}`} 
-          worldSize={this.props.world.size} 
+        <Row
+          key={i}
+          styleName={`row row-${i}`}
+          worldSize={this.props.world.size}
           dayCount={this.props.world.dayCount}
-          playerLoc={playerLoc} 
+          playerLoc={playerLoc}
           treeLocs={treeLocs}
           trees={trees}
           rowNum={padNum(i)}
@@ -83,7 +73,7 @@ class World extends Component {
     let player = {...this.props.player};
     world.moveCount++;
     let moveCount = world.moveCount;
-    if (!(moveCount < world.dayInterval)){ 
+    if (!(moveCount < world.dayInterval)){
       world.moveCount = 0;
       world.dayCount++;
     }
@@ -96,18 +86,22 @@ class World extends Component {
         return moveRandomAdjacent(this.props.world.size, creepLoc, this.props.world.wallLocs);
       });
       /**
-       * @todo creeps cant move through walls 
+       * @todo creeps cant move through walls
        */
     }
     // this.setState({world: world});
 		// this.setState({player: player});
 		this.props.setWorld({world, player});
     // gen Creeps
-    if (world.dayCount === 3){
-      world = {...this.props.world};
+    // console.log(this.props.world)
+    world = {...this.props.world}
+    if (world.dayCount === 1){
+      // world = {...this.props.world};
       if (world.creeps.locs.length === 0) {
-        world.creeps = genCreepLocs(this.gaussGen, this.props.world.creeps.total);
-        this.setState({world});
+        world.creeps = genCreepLocs(this.props.world.size, this.gaussGen, this.props.world.creeps.total);
+        console.log('======', world.creeps)
+        // this.props.world.creeps = world.creeps
+        this.props.setWorld({world, player: this.props.player});
       }
     }
 
@@ -222,13 +216,13 @@ class World extends Component {
       case ' ':
         console.log('using item');
         // Handle carrot planting
-        if (player.inventory[thisItemSelection].name === "carrot" 
+        if (player.inventory[thisItemSelection].name === "carrot"
         && player.inventory[thisItemSelection].count > 0){
           let carrots = {...this.props.world.carrots};
           carrots.locs.push(currentLoc);
           let newCarrot = {
-            location: currentLoc, 
-            supply: 3, 
+            location: currentLoc,
+            supply: 3,
             matureDay: this.props.world.dayCount + 3
           };
           this.props.world.carrots[currentLoc] = newCarrot;
@@ -237,7 +231,7 @@ class World extends Component {
           this.setState({player});
         }
         // Handle Wall Building
-        if (player.inventory[thisItemSelection].name === "wall" 
+        if (player.inventory[thisItemSelection].name === "wall"
         && player.inventory[thisItemSelection].count > 0) {
           this.props.world.wallLocs.push(currentLoc);
           player.inventory[thisItemSelection].count--;
@@ -248,13 +242,13 @@ class World extends Component {
       case 'e':
         console.log('eating item ');
         if (player.inventory[thisItemSelection].name === "carrot"){
-          if (player.health <10 && player.inventory[thisItemSelection].count > 0){ 
-            player.health++; 
+          if (player.health <10 && player.inventory[thisItemSelection].count > 0){
+            player.health++;
             player.inventory[thisItemSelection].count--;
             this.setState({player});
           }
         }
-      default: 
+      default:
         break;
       }
     // if (isAdjacent(this.worldSize, this.playerLoc, this.props.world.trees.locs)){}
